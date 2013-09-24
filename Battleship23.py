@@ -4,7 +4,8 @@
 # Battleship CPSC231 (Limited Edition! ;] )
 #********************************************
 
-# Title Screen!
+# Title Screen! Now a function!
+def draw_titlescreen():
 print();
 print('________________________________________');
 print('|*********WELCOME TO BATTLESHIP!*******|');
@@ -13,14 +14,8 @@ print('|**************************************|');
 print('|*********A game like no other!********|');
 print('|**************************************|');
 print('|**************************************|');
-print('|************copyright 2013************|');
-print('________________________________________');
-
-print();
-print('_____________');
-print('|SETUP PHASE|');
-print('-------------');
-print();
+print('|**************************************|');
+return;
 
 # Ask user to place aircraft carrier
 print ('Where would you like to place your Aircraft Carrier? (5 spaces)');
