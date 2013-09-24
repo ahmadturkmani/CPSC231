@@ -5,7 +5,7 @@
 #********************************************
 
 # Title Screen! Now a function!
-def draw_titlescreen():
+def print_titlescreen():
 print();
 print('________________________________________');
 print('|*********WELCOME TO BATTLESHIP!*******|');
@@ -15,6 +15,11 @@ print('|*********A game like no other!********|');
 print('|**************************************|');
 print('|**************************************|');
 print('|**************************************|');
+return;
+
+def print_vessel(name, x, y, direction):
+print('Your ' + name + ' is located at (' + chr(x + ord('A')) + ', ' + str(y + 1) + ')');
+print('It is positioned ' + direction + 'y.');
 return;
 
 # Ask user to place aircraft carrier
