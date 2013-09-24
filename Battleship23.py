@@ -20,28 +20,30 @@ return;
 def print_vessel(name, x, y, direction):
 print('Your ' + name + ' is located at (' + chr(x + ord('A')) + ', ' + str(y + 1) + ')');
 print('It is positioned ' + direction + 'y.');
+print();
 return;
+
+print_titlescreen();
 
 # Ask user to place aircraft carrier
 print ('Where would you like to place your Aircraft Carrier? (5 spaces)');
 x_air = ord(input('Enter horizontal position (A-J):\t')) - ord('A');
 y_air = (int(input('Enter vertical position (1-10):\t\t')) - 1);
 print();
+print_vessel('Aircraft Carrier', x_air, y_air, 'horizontal');
 
 # based on input, calculate the position of the battleship
 x_bat = (x_air + 5) % 10;
 y_bat = y_air;
+print_vessel('Battleship', x_bat, y_bat, 'vertical');
 
 # now calculate position of sub
 x_sub = x_bat;
 y_sub = (y_bat + 4) % 10;
+print_vessel('Submarine', x_sub, y_sub, 'horizontal');
 
 # the same with the destroyer
 x_des = (x_sub + 3) % 10;
 y_des = y_sub;
+print_vessel('Destroyer', x_des, y_des, 'vertical');
 
-# tell the user the position of their fleet
-print ('Your Aircraft Carrier is located at (' + chr(x_air + ord('A')) + ', ' + str(y_air + 1) + ')');
-print ('Your Battleship is located at (' + chr(x_bat + ord('A')) + ', ' + str(y_bat + 1) + ')');
-print ('Your Submarine is located at (' + chr(x_sub + ord('A')) + ', ' + str(y_sub + 1) + ')');
-print ('Your Destroyer is located at (' + chr(x_des + ord('A')) + ', ' + str(y_des + 1) + ')');
