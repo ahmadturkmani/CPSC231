@@ -6,21 +6,21 @@
 
 # Title Screen! Now a function!
 def print_titlescreen():
-print();
-print('________________________________________');
-print('|*********WELCOME TO BATTLESHIP!*******|');
-print('|**************************************|');
-print('|**************************************|');
-print('|*********A game like no other!********|');
-print('|**************************************|');
-print('|**************************************|');
-print('|**************************************|');
+  print();
+  print('________________________________________');
+  print('|*********WELCOME TO BATTLESHIP!*******|');
+  print('|**************************************|');
+  print('|**************************************|');
+  print('|*********A game like no other!********|');
+  print('|**************************************|');
+  print('|**************************************|');
+  print('|**************************************|');
 return;
 
 def print_vessel(name, x, y, direction):
-print('Your ' + name + ' is located at (' + chr(x + ord('A')) + ', ' + str(y + 1) + ')');
-print('It is positioned ' + direction + 'y.');
-print();
+  print('Your ' + name + ' is located at (' + chr(x + ord('A')) + ', ' + str(y + 1) + ')');
+  print('It is positioned ' + direction + 'y.');
+  print();
 return;
 
 print_titlescreen();
