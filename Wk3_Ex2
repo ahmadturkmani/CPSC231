@@ -9,7 +9,7 @@ This function is the bit where the formatting and output is sent the console.
 linea is the top and bottom border, while lineb is simply a space, to make formatting
 look nicer.
 """
-
+#Life is good.
 def titlescreen(): 
 	#The following 5 lines set variables to various lines of text
 	global linea
