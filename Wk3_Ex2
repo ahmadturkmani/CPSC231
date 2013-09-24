@@ -30,6 +30,7 @@ def titlescreen():
 	
 	beginscpt = "#          Please press enter....              #" #Format
 	getpass(beginscpt.center(79)) #Nice bit of text to make letter(s) entered invisible
+	#edit
 
 
 def initdisplay():
