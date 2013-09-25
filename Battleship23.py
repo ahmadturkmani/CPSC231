@@ -23,6 +23,7 @@ def print_vessel(name, x, y, direction):
   print();
 return;
 
+# prints name, location, and orientation of a vessel
 print_titlescreen();
 
 # Ask user to place aircraft carrier
