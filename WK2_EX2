@@ -1,0 +1,50 @@
+def titlescreen():
+    intro= ('####################################\n'
+            '#  welcome to the battleship game  #\n'
+            '#        BY:tut.02 Group05         #\n'
+            '#     press any key to continue    #\n'
+            '####################################')
+    print(intro)
+    begin= input('press any key to continue  ')
+    
+def grid():
+    board= ('|  |A|B|C|D|E|F|G|H|I|J|\n'
+            '|1 | | | | | | | | | | |\n'
+            '|2 | | | | | | | | | | |\n'
+            '|3 | | | | | | | | | | |\n'
+            '|4 | | | | | | | | | | |\n'
+            '|5 | | | | | | | | | | |\n'
+            '|6 | | | | | | | | | | |\n'
+            '|7 | | | | | | | | | | |\n'
+            '|8 | | | | | | | | | | |\n'
+            '|9 | | | | | | | | | | |\n'
+            '|10| | | | | | | | | | |')
+
+    print(board)
+    
+def Vessel_Info():
+    name=input('choose you vessel\n'
+               'aircraft,battleship,submarine,or destroyer?  ')
+    print('where would u like to place your', name)
+    column=input('column(A-J): ')
+    row=input('row(1-10): ')
+    direction= input('direction horizontal or vertical:')
+    print_vessel(name,column,row,direction)
+
+def print_vessel(name,column,row,direction):
+    vessel_type=name
+    column_=column
+    row_=row
+    direction_=direction
+    print(vessel_type, 'carrier position:')
+    print('column: ',column_)
+    print('row: ', row_)
+    print('Direction: ', direction_)
+
+def main():
+    titlescreen()
+    grid()
+    Vessel_Info()
+main()
+
+
