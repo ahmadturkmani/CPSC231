@@ -5,7 +5,6 @@
 #********************************************
 
 # global variables
-vessel_name = 'Aircraft Carrier';
 direction = 'horizontal';
 x = ord('A');
 y = 0;
@@ -24,7 +23,7 @@ def print_titlescreen():
     return;
 # end
 
-def print_vessel(name, x, y, direction):
+def print_vessel(name):
     print('Your ' + name + ' is located at (' + chr(x + ord('A')) + ', ' + str(y + 1) + ')');
     print('It is positioned ' + direction + 'y.');
     print();
@@ -32,6 +31,8 @@ def print_vessel(name, x, y, direction):
 # end
 
 def input_vessel(name, spaces):
+    global x; # this function can edit x
+    global y; # this function can edit y
     print ('Where would you like to place your ' + name + ' (' + str(spaces) + 'spaces)');
     x = ord(input('Enter horizontal position (A-J):\t')) - ord('A');
     y = (int(input('Enter vertical position (1-10):\t\t')) - 1);
@@ -39,36 +40,33 @@ def input_vessel(name, spaces):
     return;
 # end
     
-def calc_position(name, h_size, v_size):
-    x = (x + h_size) % 10;
-    y = (y + v_size) % 10;
-    print_vessel(name, x, y, direction);
+# Calculate next ship position based on previous ship dimentions   
+def calc_position(name, h_size_prev, v_size_prev):
+    global x; # this function can edit x
+    global y; # this function can edit x
+    x = (x + h_size_prev) % 10;
+    y = (y + v_size_prev) % 10;
+    print_vessel(name);
     return;
 # end
 
 def main():
-    # prints name, location, and orientation of a vessel
+    global direction;  # this function can edit direction
+        # prints name, location, and orientation of a vessel
     print_titlescreen();
-    
-    # Ask user to place aircraft carrier
+        # Ask user to place aircraft carrier
     input_vessel('Aircraft Carrier', 5);
     direction = 'horizontal';
-    print_vessel('Aircraft Carrier', x , y, direction);
-    
-    # based on input, calculate the position of the battleship
-    x_bat = (x_air + 5) % 10;
-    y_bat = y_air;
-    print_vessel('Battleship', x_bat, y_bat, 'vertical');
-    
-    # now calculate position of sub
-    x_sub = x_bat;
-    y_sub = (y_bat + 4) % 10;
-    print_vessel('Submarine', x_sub, y_sub, 'horizontal');
-    
-    # the same with the destroyer
-    x_des = (x_sub + 3) % 10;
-    y_des = y_sub;
-    print_vessel('Destroyer', x_des, y_des, 'vertical');
+    print_vessel('Aircraft Carrier');
+        # based on input, calculate the position of the battleship
+    direction = 'vertical';
+    calc_position('Battleship', 5, 0);
+        # now calculate position of sub
+    direction = 'horizontal';
+    calc_position('Submarine', 0, 4);
+        # the same with the destroyer
+    direction = 'vertical';
+    calc_position('Destroyer', 3, 0);
     return;
 # end
 
