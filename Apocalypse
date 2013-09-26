@@ -1,0 +1,18 @@
+#############################################################
+# By:     Ahmed Elbannan, Hilmi Abou-Saleh, Ahmad Turkmani
+# Date:   September 25th 2013
+# Name:   Apocalypse Tutorial II Collector's Edition
+#############################################################
+
+def draw_titlescreen():
+print('###################################################');
+print('#    #   ###  #=# #==   #   #   \ / ###  === #==  #');
+print('#   #=#  #==# # # #    #=#  #    #  #==# \=  #=   #');
+print('#  #   # #    #=# #== #   # #==  #  #    ==/ #==  #');
+print('###################################################');
+print('~~~~~~~~~~TUTORIAL II COLLECTOR'S EDITION~~~~~~~~~~');
+print('\\\\\\\\\\###############################//////////');
+print();
+print('~~~~~~~~\Created by the Apocalyptic Pirates/~~~~~~~');
+print('~~~~~~~~~\________copyright 2013(c)_______/~~~~~~~~');
+return;
