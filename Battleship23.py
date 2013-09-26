@@ -20,17 +20,18 @@ def print_titlescreen():
     print('|**************************************|');
     print('|**************************************|');
     print('|**************************************|');
+    print();
     return;
 # end
 
-def print_vessel(name):
+def print_vessel(name, x, y, direction):
     print('Your ' + name + ' is located at (' + chr(x + ord('A')) + ', ' + str(y + 1) + ')');
     print('It is positioned ' + direction + 'y.');
     print();
     return;
 # end
 
-def input_vessel(name, spaces):
+def get_location(name, spaces):
     global x; # this function can edit x
     global y; # this function can edit y
     print ('Where would you like to place your ' + name + ' (' + str(spaces) + 'spaces)');
@@ -40,13 +41,19 @@ def input_vessel(name, spaces):
     return;
 # end
     
-# Calculate next ship position based on previous ship dimentions   
-def calc_position(name, h_size_prev, v_size_prev):
+# Calculate next ship position based on previous ship dimensions   
+def modify_row(name, size):
+    global y; # this function can edit y
+    y = (y + size) % 10;
+    print_vessel(name, x, y, direction);
+    return;
+# end
+
+# Calculate next ship position based on previous ship dimensions   
+def modify_column(name, size):
     global x; # this function can edit x
-    global y; # this function can edit x
-    x = (x + h_size_prev) % 10;
-    y = (y + v_size_prev) % 10;
-    print_vessel(name);
+    x = (x + size) % 10;
+    print_vessel(name, x, y, direction);
     return;
 # end
 
@@ -55,18 +62,18 @@ def main():
         # prints name, location, and orientation of a vessel
     print_titlescreen();
         # Ask user to place aircraft carrier
-    input_vessel('Aircraft Carrier', 5);
+    get_location('Aircraft Carrier', 5);
     direction = 'horizontal';
-    print_vessel('Aircraft Carrier');
+    print_vessel('Aircraft Carrier', x, y, direction);
         # based on input, calculate the position of the battleship
     direction = 'vertical';
-    calc_position('Battleship', 5, 0);
+    modify_column('Battleship', 5);
         # now calculate position of sub
     direction = 'horizontal';
-    calc_position('Submarine', 0, 4);
+    modify_row('Submarine', 4);
         # the same with the destroyer
     direction = 'vertical';
-    calc_position('Destroyer', 3, 0);
+    modify_column('Destroyer', 3);
     return;
 # end
 
