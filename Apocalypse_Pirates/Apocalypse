@@ -20,7 +20,11 @@ def draw_titlescreen():
 	print('~~~~~~~~\Created by the Apocalyptic Pirates/~~~~~~~')
 	print('~~~~~~~~~\________copyright 2013(c)_______/~~~~~~~~')
 	return;
-
+"""
+I want to add  a function which asks the user for the input of the Pawn, and then
+calls the Pawn for input_piece. It can be commented-out, but for future-proof. 
+I'll add it tomorrow. I finally understand how the third exercise works so I'm set. :)
+"""
 # Gets input for a piece and sets it's location to global x/y
 def input_piece(name, color):
 	# Let's us edit global x/y
