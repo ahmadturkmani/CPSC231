@@ -53,6 +53,7 @@ def calc_position(name, color, move_x, move_y):
 	
 # Functions chill here 	
 def main():
+	print_titlescreen();
 	input_piece('Pawn', 'white');
 	calc_position('Pawn', 'black', 0, 1);
 	calc_position('Knight', 'black', 1, 1);	
