@@ -38,10 +38,10 @@ def get_location(name,size):
 def validate_location(vessel_size):
     if (direction == 'horizontal'):
         column_= ((column + vessel_size) % 10) - 1
-        print('\t\t\t\tthe end point of the vessel is at:','(', chr(column_ + ord('A'))+',',(row+1),')')
+        print('\tthe end point of the vessel is at:','(', chr(column_ + ord('A'))+',',(row+1),')')
     else:
         row_=((row+vessel_size) % 10)
-        print('\t\t\t\tthe end point of the vessel is at:','(',chr(column+ord('A'))+',',(row_),')')
+        print('\tthe end point of the vessel is at:','(',chr(column+ord('A'))+',',(row_),')')
         
 def main() :
     # modify direction global variable after each vessel
