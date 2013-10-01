@@ -1,0 +1,67 @@
+column = ('A')
+row = 1
+direction = "horizontal"
+
+def info() :
+    intro= ('####################################\n'
+            '#  welcome to the battleship game  #\n'
+            '#        BY:tut.02 Group05         #\n'
+            '#     press any key to continue    #\n'
+            '####################################')
+    print(intro)
+    begin= input('press any key to continue  ')
+
+def print_vessel(name, column,row, direction):
+    #### code from exercise 2
+    print('your ', name, ' is positioned at:\n\t\t\t\tcolumn :', chr((column) + ord('A')))
+    print('\t\t\t\trow :', row + 1)
+    print('\t\t\t\tDirection :', direction,'\n')
+    
+
+def modify_row(previous_vessel_size, vessel_name) :
+    global row
+    row = (row + previous_vessel_size) % 10
+    print_vessel(vessel_name, column, row, direction)
+
+def modify_column(previous_vessel_size, vessel_name) :
+    global column
+    column = ((column) + (previous_vessel_size)) % 10
+    print_vessel(vessel_name, column, row, direction)
+def get_location(name,size):
+    global column
+    global row
+    print('enter the placement of your',name, '(',size,')spaces')
+    column=ord(input('left column(A-J): ')) - ord('A')
+    row=int(input('top row(1-10): ')) - 1
+    print_vessel(name,column,row,direction)
+
+def validate_location(vessel_size):
+    if (direction == 'horizontal'):
+        column_= ((column + vessel_size) % 10) - 1
+        print('\t\t\t\tthe end point of the vessel is at:','(', chr(column_ + ord('A'))+',',(row+1),')')
+    else:
+        row_=((row+vessel_size) % 10)
+        print('\t\t\t\tthe end point of the vessel is at:','(',chr(column+ord('A'))+',',(row_),')')
+        
+def main() :
+    # modify direction global variable after each vessel
+    global direction
+
+    # Display program info message
+    info()
+
+   
+    get_location("aircraft carrier", 5)
+    validate_location(5)
+
+    # Change direction for next vessel to place
+    direction = "vertical"
+    modify_column((5), "battleship")
+
+    direction = "horizontal"
+    modify_row(4, "submarine")
+
+    direction = "vertical"
+    modify_column(3, "destroyer")
+
+main()
