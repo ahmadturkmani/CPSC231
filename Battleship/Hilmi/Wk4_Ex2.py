@@ -1,5 +1,5 @@
 
-def print_vessel(name):
+def print_vessel(name, column, row, direction):
 	rowd = row + 1
 	columnd = chr(column + ord('A'))
 	print(name, "Position: ")
@@ -26,23 +26,21 @@ def get_location(name, size):
 	row = input("Top Row (0 - 9): ")
 	row = ord(row)
 	column = ord(column.upper())
-	validate_location(name, vessel_size)
-
 	
 	
-def validate_location(name, vessel_size):
+	
+def validate_location(vessel_size):
 	global row
 	global direction
 	global column
 	direction = direction.lower()
 	
 	if direction == "horizontal":
-		if  64 < column < 91 or 48 < row < 58 :
+		if  64 < column < 91 or 48 < row < 58 :		
 			row = int(row)
-	
-			column = column - ord('A')			
 			vessel_size_end = column + vessel_size
-			print_vessel(name)
+			vessel_size_end = str(vessel_size_end)
+			print(vessel_size_end, str(row))
 		else:
 			row = 0 
 			column = 0 		
@@ -53,7 +51,7 @@ def validate_location(name, vessel_size):
 			row = int(row)
 			column = column.upper() - ord('A')
 			vessel_size_end = row + vessel_size
-			print_vessel(name)
+			print("Row End: ", vessel_size_end)
 		else:			
 			row = 0
 			column = 0 
@@ -73,7 +71,8 @@ def main():
 	vessel_size = 5
 	direction = "Horizontal"
 	get_location(name, vessel_size)
-	
+	validate_location(vessel_size)	
+	print_vessel(name, column, row, direction)
 	#direction = "Vertical"
 	#modify_column(5, "Submarine")
 	
