@@ -60,14 +60,16 @@ def modify_column(name, size):
 def validate_location(name, size, direction):
 	global x; # this function can edit x
 	global y; # this function can edit y
-	if (len(x) == 1) and (len(y) == 1):
+	# check if string is a single letter or smaller than a three digit number, if not, asks for input again, then checks
+	if (len(x) == 1) and (len(y) < 3):
 		x = (ord(x) - ord('A'));
 		y = (int(y) - 1);
-		if (direction == 'horizontal') and (x > -1) and (x < 10):
+		# checks if location is on the board and if the ship will fit, if not asks for input again and checks again
+		if (direction == 'horizontal') and (x > -1) and (x < (10 - size)):
 			print_vessel('Aircraft Carrier');
 			print('The end of your ' + name + ' is located at (' + chr(((x + size - 1) % 10) + ord('A')) + ', ' + str(y + 1) + ')');
 			print();
-		elif direction == 'vertical' and (y > -1) and (y < 10):
+		elif direction == 'vertical' and (y > -1) and (y < (10 - size)):
 			print_vessel('Aircraft Carrier', x, y, direction);
 			print('The end of your ' + name + ' is located at (' + chr(x + ord('A')) + ', ' + str(((y + size - 1) % 10) + 1) + ')');
 			print();
