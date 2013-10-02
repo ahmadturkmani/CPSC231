@@ -65,11 +65,11 @@ def validate_location(name, size, direction):
 		x = (ord(x) - ord('A'));
 		y = (int(y) - 1);
 		# checks if location is on the board and if the ship will fit, if not asks for input again and checks again
-		if (direction == 'horizontal') and (x > -1) and (x < (10 - size)):
+		if (direction == 'horizontal') and (-1 < x < (10 - size)) and (-1 < y < 10):
 			print_vessel('Aircraft Carrier');
 			print('The end of your ' + name + ' is located at (' + chr(((x + size - 1) % 10) + ord('A')) + ', ' + str(y + 1) + ')');
 			print();
-		elif direction == 'vertical' and (y > -1) and (y < (10 - size)):
+		elif direction == 'vertical' and (-1 < y < (10 - size)) and (-1 < x < 10):  
 			print_vessel('Aircraft Carrier', x, y, direction);
 			print('The end of your ' + name + ' is located at (' + chr(x + ord('A')) + ', ' + str(((y + size - 1) % 10) + 1) + ')');
 			print();
