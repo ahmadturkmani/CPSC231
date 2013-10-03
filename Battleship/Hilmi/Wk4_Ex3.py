@@ -59,7 +59,7 @@ def get_location(name, size):
     if direction == "horizontal":
        if  0 <= row  < 10 and 0 <= column < 10: #ASCII Values between 0-9 are valid
          row = int(row)
-         vessel_size_end = column + vessel_size - 1 #Pertaining to print_vessels adding 1
+         vessel_size_end = (column + vessel_size - 1) % 10#Pertaining to print_vessels adding 1
          vessel_size_end = chr(vessel_size_end + ord('A')) #Converting to printable string
          print("Vessel End Location: ", vessel_size_end, str(row + 1))
        else:
@@ -72,7 +72,7 @@ def get_location(name, size):
     elif direction == "vertical":
         if  0 <= row  < 10 and 0 <= column < 10:
             row = int(row)
-            vessel_size_end = row + vessel_size #Row not column!
+            vessel_size_end = (row + vessel_size) % 10 #Row not column!
             vessel_size_end = chr(vessel_size_end + 1) #Plus 1, because of int nature
             print("Row End: ", vessel_size_end)
         else:          
