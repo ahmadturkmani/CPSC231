@@ -15,7 +15,7 @@ NAME = '';
 direction = 'horizontal';
 x = ord('A');
 y = 0;
-
+# create the grid and fill it with water (~)
 w = '~'
 grid = 		[
 			[w,w,w,w,w,w,w,w,w,w],
