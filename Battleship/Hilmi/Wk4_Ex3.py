@@ -1,5 +1,5 @@
 # Title Screen! Now a function!
-def print_titlescreen():
+def titlescreen():
     print();
     print('________________________________________');
     print('|*********WELCOME TO BATTLESHIP!*******|');
