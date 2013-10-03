@@ -1,6 +1,17 @@
-
-#def titlescreen():
-
+# Title Screen! Now a function!
+def print_titlescreen():
+    print();
+    print('________________________________________');
+    print('|*********WELCOME TO BATTLESHIP!*******|');
+    print('|**************************************|');
+    print('|**************************************|');
+    print('|*********A game like no other!********|');
+    print('|**************************************|');
+    print('|**************************************|');
+    print('|**************************************|');
+    print();
+    return;
+# end
 
 
 def print_vessel(name, column, row, direction):
@@ -76,7 +87,7 @@ def get_location(name, size):
    
 def main():
     global direction
-    #titlescreen()
+    titlescreen()
     global name
     global vessel_size
     name = "Aircraft Carrier"
