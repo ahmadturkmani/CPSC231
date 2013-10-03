@@ -73,7 +73,6 @@ def get_location(name, size):
         if  0 <= row  < 10 and 0 <= column < 10:
             row = int(row)
             vessel_size_end = (row + vessel_size) % 10 #Row not column!
-            vessel_size_end = chr(vessel_size_end + 1) #Plus 1, because of int nature
             print("Row End: ", vessel_size_end)
         else:          
             row = 0 
