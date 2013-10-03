@@ -1,3 +1,4 @@
+
 # Title Screen! Now a function!
 def titlescreen():
     print();
@@ -73,7 +74,7 @@ def get_location(name, size):
         if  0 <= row  < 10 and 0 <= column < 10:
             row = int(row)
             vessel_size_end = (row + vessel_size) % 10 #Row not column!
-            print("Row End: ", vessel_size_end)
+            print("vessel End Location: ", chr(column + ord('A')),vessel_size_end)
         else:          
             row = 0 
             column = 0
