@@ -5,63 +5,87 @@
 #********************************************
 
 # CONSTANTS
-VESSEL_NAMES = ['Aircraft Carrier', 'Battleship', 'Submarine', 'Destroyer'];
-VESSEL_SIZES = [5, 4, 3, 2];
+GRID_HEIGHT = 10;
+GRID_WIDTH = 10;
+VESSEL_NAME = ['Aircraft Carrier', 'Battleship', 'Submarine', 'Destroyer'];
+VESSEL_SIZE = [5, 4, 3, 2];
+NAME = '';
 
 # global variables
 direction = 'horizontal';
 x = ord('A');
 y = 0;
 
+w = '~'
+grid = 		[
+			[w,w,w,w,w,w,w,w,w,w],
+			[w,w,w,w,w,w,w,w,w,w],
+			[w,w,w,w,w,w,w,w,w,w],
+			[w,w,w,w,w,w,w,w,w,w],
+			[w,w,w,w,w,w,w,w,w,w],
+			[w,w,w,w,w,w,w,w,w,w],
+			[w,w,w,w,w,w,w,w,w,w],
+			[w,w,w,w,w,w,w,w,w,w],
+			[w,w,w,w,w,w,w,w,w,w],
+			[w,w,w,w,w,w,w,w,w,w],
+			[w,w,w,w,w,w,w,w,w,w]];
+			
+def print_grid():
+	print('__________________________');
+	print('|  | A B C D E F G H I J |');
+	print('--------------------------');
+	row = 0;
+	column = 0;
+	for row in range(0, GRID_HEIGHT):
+		if row  == 9:
+			print( '|' + str(row + 1) + '| ', end = '');
+		else:
+			print( '|0' + str(row + 1) + '| ', end = '');			
+		for column in range(0, GRID_WIDTH):
+			print(grid[column][row] + ' ', end = '');
+		print('|');
+	print();
+			
 # Title Screen! Now a function!
 def print_titlescreen():
-    print();
-    print('________________________________________');
-    print('|*********WELCOME TO BATTLESHIP!*******|');
-    print('|**************************************|');
-    print('|**************************************|');
-    print('|*********A game like no other!********|');
-    print('|**************************************|');
-    print('|**************************************|');
-    print('|**************************************|');
-    print();
-    return;
+	global NAME;
+	print();
+	print('________________________________________');
+	print('|*********WELCOME TO BATTLESHIP!*******|');
+	print('|**************************************|');
+	print('|**************************************|');
+	print('|*********A game like no other!********|');
+	print('|**************************************|');
+	print('|**************************************|');
+	print('|**************************************|');
+	print();
+	NAME = 'Admiral ' + input('What is your name? ');
+	print();
 # end
 
-def print_vessel(name):
-    print('Your ' + name + ' is located at (' + chr(x + ord('A')) + ', ' + str(y + 1) + ')');
-    print('It is positioned ' + direction + 'y.');
-    print();
-    return;
+# let's the user choose where to place vessel
+def get_location(index):
+	global x; # this function can edit x
+	global y; # this function can edit y
+	global direction; # this function can edit direction
+	print (NAME + ', where would you like to place your ' + VESSEL_NAME[index] + '? (' + str(VESSEL_SIZE[index]) + ' spaces)');
+	x = input('Horizontal position, Sir?(A-J):');
+	y = input('Vertical position? (1-10):');
+	direction = input('Direction? [h]orizontal or [v]ertical:');
+	print();
 # end
 
-def get_location(name, spaces):
-    global x; # this function can edit x
-    global y; # this function can edit y
-    print ('Where would you like to place your ' + name + ' (' + str(spaces) + ' spaces)');
-    x = input('Enter horizontal position (A-J):');
-    y = input('Enter vertical position (1-10) :');
-    print();
-    return;
-# end
-    
-# Calculate next ship position based on previous ship dimensions   
-def modify_row(name, size):
-    global y; # this function can edit y
-    y = (y + size) % 10;
-    print_vessel(name);
-    return;
-# end
+def place_vessel(index):
+	global x;
+	global y;
+	if direction == 'h': 
+			for x in range(x, x + VESSEL_SIZE[index]):
+				grid[x][y] = str(VESSEL_SIZE[index]);
+	elif direction == 'v':
+			for y in range(y, y + VESSEL_SIZE[index]):
+				grid[x][y] = str(VESSEL_SIZE[index]);
 
-# Calculate next ship position based on previous ship dimensions   
-def modify_column(name, size):
-    global x; # this function can edit x
-    x = (x + size) % 10;
-    print_vessel(name);
-    return;
-# end
-
-def validate_location(name, size, direction):
+def validate_location(index):
 	global x; # this function can edit x
 	global y; # this function can edit y
 	# check if string is a single letter or smaller than a three digit number, if not, asks for input again, then checks
@@ -69,22 +93,18 @@ def validate_location(name, size, direction):
 		x = (ord(x) - ord('A'));
 		y = (int(y) - 1);
 		# checks if location is on the board and if the ship will fit, if not asks for input again and checks again
-		if (direction == 'horizontal') and (-1 < x < (10 - size)) and (-1 < y < 10):
-			print_vessel('Aircraft Carrier');
-			print('The end of your ' + name + ' is located at (' + chr(((x + size - 1) % 10) + ord('A')) + ', ' + str(y + 1) + ')');
-			print();
-		elif direction == 'vertical' and (-1 < y < (10 - size)) and (-1 < x < 10):  
-			print_vessel('Aircraft Carrier', x, y, direction);
-			print('The end of your ' + name + ' is located at (' + chr(x + ord('A')) + ', ' + str(((y + size - 1) % 10) + 1) + ')');
-			print();
+		if (direction == 'h') and (-1 < x < (GRID_WIDTH - VESSEL_SIZE[index])) and (-1 < y < GRID_HEIGHT):
+			place_vessel(index);
+		elif direction == 'v' and (-1 < y < (GRID_HEIGHT - VESSEL_SIZE[index])) and (-1 < x < GRID_WIDTH):  
+			place_vessel(index);
 		else:
 			print('The location you entered is not on the board!');
-			get_location('Aircraft Carrier', 5);
-			validate_location(name, size, direction);
+			get_location(index);
+			validate_location(index);
 	else:
 		print('Please enter a LETTER (between A-J) and a NUMBER (between 1-10!)');
-		get_location('Aircraft Carrier', 5);
-		validate_location(name, size, direction);
+		get_location(index);
+		validate_location(index);
 	return;
 	
 def enter_choice():
@@ -94,23 +114,17 @@ def enter_choice():
 		
 
 def main():
+	print_grid();
 	global direction;  # this function can edit direction
-        # prints name, location, and orientation of a vessel
+        # prints VESSEL_NAME[index], location, and orientation of a vessel
 	print_titlescreen();
         # Ask user to place aircraft carrier
-	get_location('Aircraft Carrier', 5);
-	direction = 'horizontal';	
-	validate_location('Aircraft Carrier', 5, direction);
-        # based on input, calculate the position of the battleship
-	direction = 'vertical';
-	modify_column('Battleship', 5);
-        # now calculate position of sub
-	direction = 'horizontal';
-	modify_row('Submarine', 4);
-        # the same with the destroyer
-	direction = 'vertical';
-	modify_column('Destroyer', 3);
-		# get the user's choice
+	i = 0;
+	for i in range(0,4):
+		get_location(i);
+		validate_location(i);
+		print_grid();
+	
 	enter_choice();
 	return;
 # end
