@@ -48,7 +48,7 @@ def get_location(name, size):
     #Begins getting user input for vessel row and column
     print("Enter the placement of your", name, "(" , size, "spaces)")
     column = input("Left Column (A-J): ")
-    row = input("Top Row (0 - 9): ")
+    row = input("Top Row (1 - 10): ")
     #Performs calculations relevant to validate location's ability to check.
     row = int(row) - 1
     column = ord(column) - ord('A')
