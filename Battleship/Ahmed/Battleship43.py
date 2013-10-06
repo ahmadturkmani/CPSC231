@@ -7,15 +7,15 @@
 # CONSTANTS
 GRID_HEIGHT = 10;
 GRID_WIDTH = 10;
-VESSEL_NAME = ['Aircraft Carrier', 'Battleship', 'Submarine', 'Destroyer'];
-VESSEL_SIZE = [5, 4, 3, 2];
+VESSEL_NAME = ['Aircraft Carrier', 'Battleship', 'Submarine', 'Destroyer', 'Patrol Boat'];
+VESSEL_SIZE = [5, 4, 3, 2, 2];
 NAME = '';
 
 # global variables
 direction = 'horizontal';
 x = ord('A');
 y = 0;
-# create the grid and fill it with water (~)
+
 w = '~'
 grid = 		[
 			[w,w,w,w,w,w,w,w,w,w],
@@ -120,7 +120,7 @@ def main():
 	print_titlescreen();
         # Ask user to place aircraft carrier
 	i = 0;
-	for i in range(0,4):
+	for i in range(0,5):
 		get_location(i);
 		validate_location(i);
 		print_grid();
