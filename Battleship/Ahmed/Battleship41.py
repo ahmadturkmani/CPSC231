@@ -82,6 +82,12 @@ def validate_location(name, size, direction):
 		get_location('Aircraft Carrier', 5);
 		validate_location(name, size, direction);
 	return;
+	
+def enter_choice():
+	choice = '';
+	while not choice == 'q':
+		choice = input('Enter choice: ');
+	return;
 		
 
 def main():
@@ -101,6 +107,8 @@ def main():
         # the same with the destroyer
 	direction = 'vertical';
 	modify_column('Destroyer', 3);
+	#loop until q is entered
+	enter_choice();
 	return;
 # end
 
