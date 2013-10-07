@@ -41,6 +41,7 @@ def modify(player):
         print_location(player,color,name)
 
 def main():
+        global color
         global x
         global y
         show_title()
