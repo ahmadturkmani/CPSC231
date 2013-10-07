@@ -1,3 +1,5 @@
+#This program is the 4th week submission for Tutorial 2 Group 5's game apocalypse
+
 name='pawn'
 column=ord('a')
 row=1
