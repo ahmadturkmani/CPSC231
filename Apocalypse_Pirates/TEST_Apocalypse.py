@@ -1,10 +1,10 @@
-#################################################################
-# By:     Ahmed Elbannan, Hilmi Abou-Saleh, Ahmad Turkmani      #
-# Date:   September 25th 2013                                   #
-# Name:   Apocalypse Tutorial II Collector's Edition            #
-#################################################################
+###########################################################################################
+# By:     Ahmed Elbannan, Hilmi Abou-Saleh, Ahmad Turkmani, Namhyuk Woo, Nasir Osman      #
+# Date:   September 25th 2013                                                             #
+# Name:   Apocalypse Tutorial II Collector's Edition                                      #
+###########################################################################################
 
-import GraphLib
+import TEST_Graphics
 
 x = ord('A');
 y = 0;
