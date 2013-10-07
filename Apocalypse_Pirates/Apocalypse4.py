@@ -6,6 +6,7 @@
 
 x = ord('A');
 y = 0;
+piece = ''
 
 # Draws the title screen!!!!!!!!!!!!!!!!!!!!!!!
 def print_titlescreen():
@@ -27,42 +28,48 @@ I'll add it tomorrow. I finally understand how the third exercise works so I'm s
 Why?
 """
 # Gets input for a piece and sets it's location to global x/y
-def input_piece(name, color):
+def input_piece(player):
 	# Let's us edit global x/y
 	global x;
 	global y;
+	global piece;
+	piece = 'Pawn';
 	# Ask the user where he wants to place his piece;
-	print('Where would you like to place your ' + color + ' ' + name + '?');
+	print('Where would you like to place your ' + player + ' ' + piece + '?');
 	x = (ord(input('Row (a-e)    : ')) - ord('a'));
 	y = (int(input('Column (1-5) : ')) - 1);
 	print();
 	# Print it
-	print_piece(name, color);
+	
+	print_piece(player);
 	return;
 
 # Prints out a piece of chosen color 	
-def print_piece(name, color):
-	print('A ' + color + ' ' + name + ' is located at (' + (chr(x + ord('a'))) + ',' + str(y + 1) + ').');
+def print_piece(player):
+	print('A ' + player + ' ' + piece + ' is located at (' + (chr(x + ord('a'))) + ',' + str(y + 1) + ').');
 	print();
 	return;
 
 # Calculate where the other pieces are, one by one
-def calc_position(name, color, move_x, move_y):
+def calc_position(player, move_x, move_y):
 	# Let's us edit global x/y
 	global x;
 	global y;
 	# Now... CALCULATION TIME! ~(o_o)~
 	x = (x + move_x) % 5;
 	y = (y + move_y) % 5;
-	print_piece(name, color);
+	print_piece(player);
 	return;
 	
 # Functions chill here 	
 def main():
+	global piece;
 	print_titlescreen();
-	input_piece('Pawn', 'white');
-	calc_position('Pawn', 'black', 0, 1);
-	calc_position('Knight', 'black', 1, 1);	
+	input_piece('white');
+	piece = 'Pawn';
+	calc_position('black', 0, 1);
+	piece = 'Knight';
+	calc_position('black', 1, 1);	
 	return;
 
 main();
