@@ -2,6 +2,8 @@
 # By Hilmi Abou-Saleh
 # October, 7 2013
 # Battleship CPSC231 - Brown Edition
+#Work derived from Ahmed's Set3_Ex3.py.
+#Set4_Ex1 content Hilmi Abou-Salehs. 
 #********************************************
 
 # global variables
