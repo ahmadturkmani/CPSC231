@@ -83,9 +83,12 @@ def validate_location(name, size, direction):
 		validate_location(name, size, direction)
 
 
-#Enter Choice Function
-
-
+#Enter quits the program when the user inputs q
+def program_stop():
+	quit = 'n'
+	while quit == 'n':
+		quit = input("Do you want to quit(y/n): ")	
+	
 
 def main():
 	global direction
@@ -110,9 +113,10 @@ def main():
         # the same with the destroyer
 	direction = 'vertical'
 	modify_column('Destroyer', 3)
-
-
-
+	
+	#Calling Program to stop program.
+	program_stop()
+	
 # end
 
 main()
