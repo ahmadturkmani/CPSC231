@@ -36,7 +36,7 @@ def print_grid():
 	print('--------------------------');
 	row = 0;
 	column = 0;
-	for row in range(0, GRID_HEIGHT):
+	for row in range(GRID_HEIGHT):
 		if row  == 9:
 			print( '|' + str(row + 1) + '| ', end = '');
 		else:
@@ -120,7 +120,7 @@ def main():
 	print_titlescreen();
         # Ask user to place aircraft carrier
 	i = 0;
-	for i in range(0,5):
+	for i in range(5):
 		get_location(i);
 		validate_location(i);
 		print_grid();
