@@ -7,6 +7,23 @@
 # global variables kept in lists
 VESSEL_NAMES = ["Aircraft Carrier", "Battleship", "Submarine", "Destroyer", "Patrol Boat"]
 VESSEL_SIZES = [5, 4, 3, 3, 2]
+GRID_WIDTH = 10
+GRID_HEIGHT = 10
+
+#Water
+W = '~'
+
+grid = [[W,W,W,W,W,W,W,W,W,W], \
+            [W,W,W,W,W,W,W,W,W,W], \
+            [W,W,W,W,W,W,W,W,W,W], \
+            [W,W,W,W,W,W,W,W,W,W], \
+            [W,W,W,W,W,W,W,W,W,W], \
+            [W,W,W,W,W,W,W,W,W,W], \
+            [W,W,W,W,W,W,W,W,W,W], \
+            [W,W,W,W,W,W,W,W,W,W], \
+            [W,W,W,W,W,W,W,W,W,W], \
+            [W,W,W,W,W,W,W,W,W,W]]
+
 
 #Intro - Titlescreen no input. * - are for formatting
 def print_titlescreen():
