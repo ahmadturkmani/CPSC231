@@ -1,0 +1,79 @@
+## Let's define our global variables over here
+GRID_WIDTH = 10
+GRID_HEIGHT = 10
+VESSELS_NAMES['Aircraft carrier', 'Battleship', 'Submarine', 'Destroyer']
+VESSEL_SIZES[5,4,3,2]
+
+
+
+def info():
+  title_screen = """
+  
+  __________         __    __  .__                .__    .__           ._.  ._.  ._. 
+\______   \_____ _/  |__/  |_|  |   ____   _____|  |__ |__|_____     | |  | |  | | 
+ |    |  _/\__  \\   __\   __\  | _/ __ \ /  ___/  |  \|  \____ \    |_|  |_|  |_| 
+ |    |   \ / __ \|  |  |  | |  |_\  ___/ \___ \|   Y  \  |  |_> >   |-|  |-|  |-| 
+ |______  /(____  /__|  |__| |____/\___  >____  >___|  /__|   __/    | |  | |  | | 
+        \/      \/                     \/     \/     \/   |__|       |_|  |_|  |_| 
+                                                                                   
+                             The unfinished game! 
+                        
+               ______   ______   ______               ______   ______   ______     
+              /_____/  /_____/  /_____/              /_____/  /_____/  /_____/     
+ ____________                           ____________                               
+/_____/_____/                          /_____/_____/                               
+   
+                """
+                  
+  print(title_screen)
+  print("Welcome to Battleship! Although this is game is still in it's preliminary stages, you will be able to test it out as we progress through the game's development!")
+  print()
+  
+  
+def print_vessel(index, column, row, direction):
+  column_to_display = chr(column + ord('A'))
+  row_to_display = y+1
+  
+  print(VESSEL_NAMES[index], " Position:")
+  print("\t Column: ", column_to_display")
+  print("\t Row: ", row_to_display")
+  print("\t Direction: ", direction)
+  
+  
+def get_location(vessel_index):
+  name = VESSEL_NAMES[vessel_index]
+  size = VESSEL_SIZES[vessel_index]
+  
+  # Let's get the input from the user
+  print("Enter the placement of your", name, "(", size, "spaces)")
+  column = input("Left column (A-J):")
+  row = int(input("Top row (1-10):"))
+  
+  # Now we will prompt the user for the orientation of the vessel by either pressing v or h
+  # Then we will convert the string v into vertical and h into horizontal by using if statements and a blank string
+  
+  
+  direction = ' '
+  direction_input = input("Would you like your vessel placed [v]ertically or [h]orizontally?")
+  
+  # I am thinking of  turning this section of code into a get_direction function so it will
+   just reprompt the user to enter in the correct orientation of his/her vessel instead of having to re-enter in the column and row over again!!
+  
+  
+  if direction_input == 'v':
+    direction == 'vertical'
+  elif direction_input =='h':
+    direction == 'horizontal'
+  
+  else:
+    print("Sorry, please enter in a valid orientation for the vessel using either [v]ertical or [h]orizontal!")
+    
+    get_location(vessel_index)
+    
+    # Convert user input to row and colum values between 0 and 9
+    column = ord(column) - ord('A')
+    row = row - 1
+ 
+  
+  
+  
