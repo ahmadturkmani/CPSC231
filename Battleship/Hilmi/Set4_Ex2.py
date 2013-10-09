@@ -4,27 +4,29 @@
 # Battleship CPSC231 - Brown Edition
 #********************************************
 
-# global variables
+# global variables kept in lists
 VESSEL_NAMES = ["Aircraft Carrier", "Battleship", "Submarine", "Destroyer", "Patrol Boat"]
 VESSEL_SIZES = [5, 4, 3, 3, 2]
 
-# Title Screen! Now a function!
+#Intro - Titlescreen no input. * - are for formatting
 def print_titlescreen():
     print();
-    print('________________________________________');
-    print('|*********WELCOME TO BATTLESHIP!*******|');
-    print('|**************************************|');
-    print('|**************************************|');
-    print('|*********  The Game For All!  ********|');
-    print('|**************************************|');
-    print('|**************************************|');
-    print('|**************************************|');
-    print();
+    print('________________________________________')
+    print('|*********WELCOME TO BATTLESHIP!*******|')
+    print('|**************************************|')
+    print('|**************************************|')
+    print('|*********  The Game For All!  ********|')
+    print('|**************************************|')
+    print('|**************************************|')
+    print('|**************************************|')
+    print()
     
 # end
 
 def print_vessel(x, y, direction, vessel_index):
-	name = VESSEL_NAMES[vessel_index]
+	name = VESSEL_NAMES[vessel_index] #Pulling name of vessel desired - from list of names
+
+	#Printing position/direction in a easy to read format (on console)
 	print('Your ' + name + ' is located at (' + chr(x + ord('A')) + ', ' + str(y + 1) + ')')
 	print('It is positioned ' + direction + 'ly.')
 	print() #empty line
@@ -32,27 +34,36 @@ def print_vessel(x, y, direction, vessel_index):
 # end
 
 def get_location(vessel_index):
+    #global variables that we are editing
     global x # this function can edit x
     global y # this function can edit y
     global direction
+   
+    #Getting name and size of vessel for next statements
     name = VESSEL_NAMES[vessel_index]
     size = VESSEL_SIZES[vessel_index]
+    
+    #Printing prompt for user, following the user's input. 
     print ('Where would you like to place your ' + name + ' (' + str(size) + ' spaces)')
     x = input('Enter horizontal position (A-J):')
     y = input('Enter vertical position (1-10) :')
     direction = input("Enter direction of vessel (Horizontal/Vertical): ")
-    print()
+    print() #Adding a empty line
 	
 # end
 
 def validate_location(x, y, direction, vessel_index):
 	# check if string is a single letter or smaller than a three digit number, if not, asks for input again, then checks
+
 	name = VESSEL_NAMES[vessel_index]
 	size = VESSEL_SIZES[vessel_index]
 	
 	if (len(x) == 1) and (len(y) < 3):
+		
+		#Converting row(x) and column(y) into integers which can be easily modified.
 		x = (ord(x) - ord('A'))
 		y = (int(y) - 1)
+		
 		# checks if location is on the board and if the ship will fit, if not asks for input again and checks again
 		if (direction == 'Horizontal') and (-1 < x < (10 - size)) and (-1 < y < 10):
 			print_vessel(x, y, direction, vessel_index)
