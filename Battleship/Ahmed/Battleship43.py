@@ -30,6 +30,7 @@ grid = 		[
 			[w,w,w,w,w,w,w,w,w,w],
 			[w,w,w,w,w,w,w,w,w,w]];
 			
+# print out the grid			
 def print_grid():
 	print('__________________________');
 	print('|  | A B C D E F G H I J |');
@@ -75,6 +76,7 @@ def get_location(index):
 	print();
 # end
 
+# put vessel on board
 def place_vessel(index):
 	global x;
 	global y;
@@ -84,7 +86,8 @@ def place_vessel(index):
 	elif direction == 'v':
 			for y in range(y, y + VESSEL_SIZE[index]):
 				grid[x][y] = str(VESSEL_SIZE[index]);
-
+				
+# checks if the location is valid
 def validate_location(index):
 	global x; # this function can edit x
 	global y; # this function can edit y
@@ -107,12 +110,13 @@ def validate_location(index):
 		validate_location(index);
 	return;
 	
+# doesn't quit unless q is entered	
 def enter_choice():
 	choice = '';
 	while not choice == 'q':
 		choice = input('Enter choice: ');
 		
-
+# now put it all together!
 def main():
 	print_grid();
 	global direction;  # this function can edit direction
