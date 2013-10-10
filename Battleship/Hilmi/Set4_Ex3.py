@@ -4,15 +4,15 @@
 # Battleship CPSC231 - Brown Edition
 #********************************************
 
-# global variables kept in lists
+# global variables kept in lists; CAPITALS symbolize constants.
 VESSEL_NAMES = ["Aircraft Carrier", "Battleship", "Submarine", "Destroyer", "Patrol Boat"]
 VESSEL_SIZES = [5, 4, 3, 3, 2]
 GRID_WIDTH = 10
 GRID_HEIGHT = 10
 
-#Water
+#Water for grid
 W = "~"
-
+#Grid which will store users ships
 grid = [[W,W,W,W,W,W,W,W,W,W], \
             [W,W,W,W,W,W,W,W,W,W], \
             [W,W,W,W,W,W,W,W,W,W], \
@@ -48,6 +48,8 @@ def print_vessel(x, y, direction, vessel_index):
 	print('It is positioned ' + direction + 'ly.')
 	print() #empty line
 
+#Printing the grid, with some formatting
+#Not as clean as I'd like yet, but will do.
 	print("  | A B C D E F G H I J")
 	print("1 |",grid[0])
 	print("2 |",grid[1])
@@ -59,9 +61,6 @@ def print_vessel(x, y, direction, vessel_index):
 	print("8 |",grid[7])
 	print("9 |",grid[8])
 	print("10|",grid[9])									
-	global grid
-	
-
 
 # end
 
@@ -69,7 +68,7 @@ def get_location(vessel_index):
     #global variables that we are editing
     global x # this function can edit x
     global y # this function can edit y
-    global direction
+    global direction # being able to edit direction
    
     #Getting name and size of vessel for next statements
     name = VESSEL_NAMES[vessel_index]
@@ -86,12 +85,12 @@ def get_location(vessel_index):
 
 def validate_location(x, y, direction, vessel_index):
 	# check if string is a single letter or smaller than a three digit number, if not, asks for input again, then checks
+	#Setting up variables and editing for the next part
 	global grid
 	name = VESSEL_NAMES[vessel_index]
 	size = VESSEL_SIZES[vessel_index]
 	
 	if (len(x) == 1) and (len(y) < 3):
-		
 		#Converting row(x) and column(y) into integers which can be easily modified.
 		x = (ord(x) - ord('A'))
 		y = (int(y) - 1)
@@ -100,31 +99,44 @@ def validate_location(x, y, direction, vessel_index):
 		
 		# checks if location is on the board and if the ship will fit, if not asks for input again and checks again
 		if (direction == 'Horizontal') and (-1 < x < (10 - size)) and (-1 < y < 10):
-			index_h = 0
-			while index_h <= VESSEL_SIZES[vessel_index]:
-				index_h = index_h + 1 
-				y = y + 1
-				grid[x][y] = VESSEL_SIZES[vessel_index]
+			#Variables
+			index_h = 0 #Counter
 			
-			y = y - VESSEL_SIZES[vessel_index]	
+			#Processing
+			while index_h <= VESSEL_SIZES[vessel_index]:
+				#Adding to counter
+				index_h = index_h + 1 
+				#y is where the change in the ship is going to be
+				#adding one, makes the ship take up the spaces it needs to for the grid
+				y = y + 1 
+				grid[x][y] = VESSEL_SIZES[vessel_index]
+			#Resetting y, to what it was previously
+			y = y - VESSEL_SIZES[vessel_index]	#Resetting y to original position
+			
+			#Printing output
 			print_vessel(x, y, direction, vessel_index)
 			print('The end of your ' + name + ' is located at (' + chr(((x + size - 1) % 10) + ord('A')) + ', ' + str(y + 1) + ')')
 			print()
 		elif direction == 'Vertical' and (-1 < y < (10 - size)) and (-1 < x < 10):  
 			index_v = 0
 			while index_v <= VESSEL_SIZES[vessel_index]:
+				#See previous comments, only change is moving x instead of y
 				index_v = index_v + 1
 				x = x + 1
 				grid[x][y] = VESSEL_SIZES[vessel_index]
 				
 			x = x - VESSEL_SIZES[vessel_index]	
+			
+			#Printing Output
 			print_vessel(x, y, direction, vessel_index)
 			print('The end of your ' + name + ' is located at (' + chr(x + ord('A')) + ', ' + str(((y + size - 1) % 10) + 1) + ')')
 			print()
-		else:
+		
+		else: # If horizontal/vertical + something else is not met.
 			print('The location you entered is not on the board!')
 			get_location(index)
 			validate_location(name, size, direction, vessel_index)
+
 	else:
 		print('Please enter a LETTER (between A-J) and a NUMBER (between 1-10!)')
 		get_location(index)
@@ -142,7 +154,7 @@ def main():
 	print_titlescreen();
 	global index
 	index = 0
-	for index in range(len(VESSEL_NAMES)):
+	for index in range(len(VESSEL_NAMES)): #For loop that runs for all vessels
 		get_location(index)
 		validate_location(x, y, direction, index)
 		index = index + 1    	
