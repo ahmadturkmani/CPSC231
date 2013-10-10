@@ -118,10 +118,10 @@ def enter_choice():
 		
 # now put it all together!
 def main():
-	print_grid();
-	global direction;  # this function can edit direction
+        
         # prints VESSEL_NAME[index], location, and orientation of a vessel
 	print_titlescreen();
+	print_grid();
         # Ask user to place aircraft carrier
 	i = 0;
 	for i in range(5):
