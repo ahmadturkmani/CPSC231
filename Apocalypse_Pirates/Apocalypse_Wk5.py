@@ -26,13 +26,16 @@ def input_location(color,name):
         global column
         global row
         print ('please indicate the column, and row at which the', color,name, 'will be placed at')
-        column= ord(input('column (a-e): ')) - ord('a')
-        row= int(input(' row (1-5): ')) - 1
-
-def show_test(row, column):
+        column= input('column (a-e): ')
+        row= input(' row (1-5): ')
+        show_test()
+		
+def show_test():
        global row
        global column
        if 0 < len(column) < 2 and 0 < len(row) < 2:
+           row = int(row) - 1
+           column = ord(column) - ord('a')
            if  0 <= row < 5:
                if 0 <= column < 5:
                    print_location(player, color, name)
@@ -62,9 +65,10 @@ def main():
         global color
         global x
         global y
+        global player
+        player = 'one'
         show_title()
         input_location('white','pawn')
-        show_test(row, column)
         #modify('one')
         #y=1
         #color='black'
@@ -73,4 +77,3 @@ def main():
         #y=1
         #modify('two')
 main()
-
