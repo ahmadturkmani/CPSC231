@@ -28,9 +28,9 @@ def input_location(color,name):
         print ('please indicate the column, and row at which the', color,name, 'will be placed at')
         column= input('column (a-e): ')
         row= input(' row (1-5): ')
-        show_test()
+        validate_input()
 		
-def show_test():
+def validate_input():
        global row
        global column
        if 0 < len(column) < 2 and 0 < len(row) < 2:
@@ -50,16 +50,21 @@ def show_test():
            input_location(color,name)
 
 def print_location(player,color,name):
-        print('the player',player+"'s",color, name,'is located at:','(', chr((column) + ord('a')),',',row+1,')')
-
-
+        print('the player',player+"'s",color, name,'is located at:','(', chr((_cold) + ord('a')),',',_rowd+1,')')
 
 def modify(player):
         global row
         global column
-        column=(column + x) % 5
-        row=((row + y) % 5)
-        print_location(player,color,name)
+        global _cold
+        global _rowd
+        _cold=(column + x) 
+        _rowd=((row + y)
+
+        if  0 =< _cold < 5 and 0 =< _rowd < 5:
+        	print_location(player,color,name)
+
+        else:
+        	return
 
 def main():
         global color
@@ -69,11 +74,11 @@ def main():
         player = 'one'
         show_title()
         input_location('white','pawn')
-        #modify('one')
-        #y=1
-        #color='black'
-        #modify('two')
-        #x=1
-        #y=1
-        #modify('two')
+        modify('one')
+        y=1
+        color='black'
+        modify('two')
+        x=1
+        y=1
+        modify('two')
 main()
