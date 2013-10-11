@@ -7,7 +7,6 @@ row=1
 color='white'
 x=0
 y=0
-
 def show_title():#Printing initialziation - intro screen
         print('###################################################')
         print('#    #   ###  #=# #==   #   #   \ / ###  === #==  #')
@@ -65,22 +64,22 @@ def validate_input(): #Validates location and prompts user to fix error
            input_location(color,name)
 
 def print_location(player,color,name): #Prints location
-        print('the player',player+"'s",color, name,'is located at:','(', chr((_cold) + ord('a')),',',_rowd+1,')')
+		print(chr(column + ord('a')), row + 1)
 
 
 def modify(player): 
         #setting global variables
-        global _cold
-        global _rowd
+        global column
+        global row
         
         #calculates location of piece
-        _cold=(column + x) #x is the shift in x direction
-        _rowd=((row + y) # y is the shift in the y direction
-	
-	#if locations are valid, will print location of piece, otherwise, wont be printed
-        if  0 =< _cold < 5 and 0 =< _rowd < 5:
-        	print_location(player,color,name)
+        column = (column + x ) #x is the shift in x direction
+        row = (row + y) # y is the shift in the y direction
 
+	
+		#if locations are valid, will print location of piece, otherwise, wont be printed
+        if  (0 <= column < 5) and (0 <= row < 5):
+        	print_location(player, color, name)
         else:
         	return
 
