@@ -4,7 +4,10 @@
 # Name:   Apocalypse Tutorial II Collector's Edition                                      #
 ###########################################################################################
 
-import TEST_Graphics
+import TKLib
+
+WIDTH = 960
+HEIGHT = 720
 
 x = ord('A');
 y = 0;
@@ -57,11 +60,26 @@ def calc_position(name, color, move_x, move_y):
 # Functions chill here 	
 def main():
 	global root
-	root = GraphLib.window()
-	entry1 = GraphLib.Entry(root.name, 1, 1)
+	root = TKLib.window('spr_back.gif', WIDTH, HEIGHT)
+	
+	title = TKLib.LabelImg(root.name, 0, 0, 960, 128)
+	title.init('spr_title.gif')
+	
+	canvas = TKLib.MyCanvas(root.name, 336, 264, 288, 192)
+	canvas.init('black')
+	canvas.add_pic('spr_board.gif', 24, 24)
+	
+	entry1 = TKLib.Entry(root.name, 800, 512, 96, 32)
 	entry1.init(20, 'Enter Location')
-	button1 = GraphLib.Button(root.name, 2, 1)
+	
+	button1 = TKLib.Button(root.name, 896, 512, 64, 32)
 	button1.init('', 'Button!')
+	label1 = TKLib.Label(root.name, 336, 456, 288, 48)
+	label1.init('-')
+	label2 = TKLib.Label(root.name, 336, 456 + 48, 288, 48)
+	label2.init('-')
+	label3 = TKLib.Label(root.name, 336, 456 + 92, 288, 48)
+	label3.init('-')
 	#print_titlescreen();
 	#input_piece('Pawn', 'white');
 	#calc_position('Pawn', 'black', 0, 1);
@@ -70,4 +88,3 @@ def main():
 	return;
 
 main();
-
