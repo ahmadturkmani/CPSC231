@@ -5,86 +5,58 @@
 ###########################################################################################
 
 import TKLib
+import GameLib
+import cfg
 
-WIDTH = 960
-HEIGHT = 720
+cfg.WIDTH = 960
+cfg.HEIGHT = 720
+cfg.SQ_WID = 48
+cfg.SQ_HEI = 24
+cfg.BOARD_W = 5
+cfg.BOARD_H = 5
+cfg.x = ord('A');
+cfg.y = 0;
 
-x = ord('A');
-y = 0;
 
-# Draws the title screen!!!!!!!!!!!!!!!!!!!!!!!
-def print_titlescreen():
-	print('###################################################');
-	print('#    #   ###  #=# #==   #   #   \ / ###  === #==  #');
-	print('#   #=#  #==# # # #    #=#  #    #  #==# \=  #=   #');
-	print('#  #   # #    #=# #== #   # #==  #  #    ==/ #==  #');
-	print('###################################################');
-	print("~~~~~~~~~~TUTORIAL II COLLECTOR'S EDITION~~~~~~~~~~");
-	print('\\\\\\\\\\###############################//////////');
-	print();
-	print('~~~~~~~~\Created by the Apocalyptic Pirates/~~~~~~~');
-	print('~~~~~~~~~\________copyright 2013(c)_______/~~~~~~~~');
-	print();
-	return;
-
-# Gets input for a piece and sets it's location to global x/y
-def input_piece(name, color):
-	# Let's us edit global x/y
-	global x;
-	global y;
-	# Ask the user where he wants to place his piece
-	print('Where would you like to place your ' + color + ' ' + name + '?');
-	x = (ord(input('Row (a-e)    : ')) - ord('a'));
-	y = (int(input('Column (1-5) : ')) - 1);
-	print();
-	# Print it
-	print_piece(name, color);
-	return;
-
-# Prints out a piece of chosen color 	
-def print_piece(name, color):
-	print('A ' + color + ' ' + name + ' is located at (' + (chr(x + ord('a'))) + ',' + str(y + 1) + ').');
-	print();
-	return;
-
-# Calculate where the other pieces are, one by one
-def calc_position(name, color, move_x, move_y):
-	# Let's us edit global x/y
-	global x;
-	global y;
-	# Now... CALCULATION TIME! ~(o_o)~
-	x = (x + move_x) % 5;
-	y = (y + move_y) % 5;
-	print_piece(name, color);
 	
 # Functions chill here 	
 def main():
-	global root
-	root = TKLib.window('spr_back.gif', WIDTH, HEIGHT)
+	cfg.canvas = ['' for i in range(9)]
+	cfg.label = ['' for i in range(99)]
+	cfg.entry = ['' for i in range(9)]
+	cfg.button = ['' for i in range(9)]
+	cfg.img = ['' for i in range(99)]
 	
-	title = TKLib.LabelImg(root.name, 0, 0, 960, 128)
-	title.init('spr_title.gif')
+	cfg.root = TKLib.window('spr_back.gif', cfg.WIDTH, cfg.HEIGHT)
+	cfg.root.name.title('Apocalypse')
 	
-	canvas = TKLib.MyCanvas(root.name, 336, 264, 288, 192)
-	canvas.init('black')
-	canvas.add_pic('spr_board.gif', 24, 24)
+	cfg.label[0] = TKLib.LabelImg(cfg.root.name, 0, 0, 960, 128)
+	cfg.img[0] = TKLib.load_image('spr_title.gif')
+	cfg.label[0].init(cfg.img[0])
 	
-	entry1 = TKLib.Entry(root.name, 800, 512, 96, 32)
-	entry1.init(20, 'Enter Location')
-	
-	button1 = TKLib.Button(root.name, 896, 512, 64, 32)
-	button1.init('', 'Button!')
-	label1 = TKLib.Label(root.name, 336, 456, 288, 48)
-	label1.init('-')
-	label2 = TKLib.Label(root.name, 336, 456 + 48, 288, 48)
-	label2.init('-')
-	label3 = TKLib.Label(root.name, 336, 456 + 92, 288, 48)
-	label3.init('-')
-	#print_titlescreen();
-	#input_piece('Pawn', 'white');
-	#calc_position('Pawn', 'black', 0, 1);
-	#calc_position('Knight', 'black', 1, 1);
-	root._loop()
-	return;
+	cfg.canvas[0] = TKLib.MyCanvas(cfg.root.name, 336, 264, 288, 192)
+	cfg.canvas[0].init('black')
+	cfg.img[1] = TKLib.load_image('spr_board.gif')
+	cfg.img[2] = TKLib.load_image('spr_whitepawn.gif')
+	cfg.canvas[0].add_pic(cfg.img[1], 0, 24, 'board')
+	cfg.canvas[0].add_pic(cfg.img[2], 24, 24, 'pawn')
 
-main();
+	cfg.entry[0] = TKLib.Entry(cfg.root.name, 496, 672, 384, 32)
+	cfg.entry[0].init('')
+	cfg.button[0] = TKLib.Button(cfg.root.name, 880, 672, 64, 32)
+	cfg.button[0].init('Go!', GameLib.button_press)
+
+	cfg.frame = TKLib.Frame(cfg.root.name, 16, 512, 448, 192)
+	cfg.frame.init()
+
+	cfg.label[0] = TKLib.Label(cfg.frame.name, 0, 0, 288, 48)
+	cfg.label[0].init('Where would you like to place your pawn?')
+	cfg.label[1] = TKLib.Label(cfg.frame.name, 0, 48, 288, 48)
+	cfg.label[1].init('Enter Column(A-E)')
+	cfg.label[2] = TKLib.Label(cfg.frame.name, 0, 96, 288, 48)
+	cfg.label[2].init('')
+	cfg.label[3] = TKLib.Label(cfg.frame.name, 0, 144, 288, 48)
+	cfg.label[3].init('')
+	cfg.root._loop()
+
+main()
