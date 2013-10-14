@@ -1,5 +1,5 @@
 #********************************************
-# By Group 05 Tutorial 02
+# By Ahmed Elbannan
 # September 22nd 2013
 # Battleship CPSC231 (Limited Edition! ;] )
 #********************************************
