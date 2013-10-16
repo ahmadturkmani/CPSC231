@@ -1,0 +1,112 @@
+import random
+
+
+
+
+#Global constants
+
+GRID_WIDTH = 10
+GRID_HEIGHT = 10
+
+VESSEL_NAMES = ["aircraft carrier", "battleship", "destroyer", "patrol boat"]
+VESSEL_SIZES = [5,4,3,2]
+NUM_OF_VESSELS = 4
+
+# Grid full of B's (Blanks)
+B = '_'
+grid = [[B,B,B,B,B,B,B,B,B,B], \
+            [B,B,B,B,B,B,B,B,B,B], \
+            [B,B,B,B,B,B,B,B,B,B], \
+            [B,B,B,B,B,B,B,B,B,B], \
+            [B,B,B,B,B,B,B,B,B,B], \
+            [B,B,B,B,B,B,B,B,B,B], \
+            [B,B,B,B,B,B,B,B,B,B], \
+            [B,B,B,B,B,B,B,B,B,B], \
+            [B,B,B,B,B,B,B,B,B,B], \
+            [B,B,B,B,B,B,B,B,B,B]]
+
+# Prints the grid in a human readable fashion
+def print_grid() :
+    # print the labels of the columns first
+    print("   A B C D E F G H I J")
+    for row_index in range(0, GRID_HEIGHT) :
+        # print the label of the row on the current line
+        print(row_index + 1, '', end="")
+        # add an extra space if the number is a single digit number
+        # this is to ensure rows with a single and double digit
+        # number line up the same.
+        if (row_index + 1 < 10) :
+            print(' ', end="")
+
+        for column_index in range(0, GRID_WIDTH) :
+            print(grid[row_index][column_index], '', end="")
+
+        # finished printing all items in the row.  Print a newline to go to
+        # the next row.
+        print()
+
+
+def info() :
+    print("Welcome to the battleship game.")
+    print("This iteration asks you to enter the location of all vessels and places", \
+              "it in a grid.")
+    print()
+
+# This functions adds the vessel indicated by the arguments to the grid.  The index
+# indicates the vessel that is to be added.  The row and column indicate the top
+# left corner and direction indicates if the direction should be horizontal ('h') 
+# or vertical ('v')
+def add_vessel(index, row, column, direction) :
+    size = VESSEL_SIZES[index]
+
+    if (direction == 'h') :
+        for column_index in range(column, column + size) :
+            grid[row][column_index] = size
+    else :
+        for row_index in range(row, row + size) :
+            grid[row_index][column] = size
+
+# This function will ask the user where to place the vessel.  The vessel to 
+# be added to the grid is indicated by the index.
+def get_location():
+    global column
+    global row
+    global direction
+
+#Both row and column will have randomly selected values
+    
+    row = random.randint(0,9)
+    column = random.randint(0,9)
+
+#Direction will either be 1 or 2, which will translate to vertical or horizontal by using if statements!
+    direction = random.randint(1,2)
+
+    if direction == 1:
+        direction = 'v'
+    elif direction == 2:
+        direction == 'h'
+
+
+
+    # Prints the menu to the user.  Right now the menu is pretty simple since the program
+# only has the option to quit.
+def print_menu() :
+    print("\nEnter grid location or q to quit\n")
+
+def main() :
+    # Get the location of all vessels from the user.
+    for index in range(0, NUM_OF_VESSELS) :
+        get_location(index)
+
+    # Print the grid that results from all the inserted vessels.
+    print_grid()
+
+    # Run the game.  (This is pretty simple right now since we're only 
+    # allowing the user to quit!)
+    print_menu()
+    choice = ""
+    while (choice != 'q') :
+        choice = input("Enter choice: ")
+
+
+main()
