@@ -89,7 +89,28 @@ def place_vessel(index):
 	elif direction == 'v':
 			for y in range(y, y + VESSEL_SIZE[index]):
 				grid[x][y] = str(VESSEL_SIZE[index]);
-				
+
+# put vessel on board
+def has_overlap(index):
+	
+	check_x = x;
+	check_y = y;
+	no_overlap = 'true';
+	
+	if direction == 'h': 
+			for check_x in range(check_x, check_x + VESSEL_SIZE[index]):
+				if grid[check_x][check_y] !='~':
+						no_overlap = 'false';
+						break;
+					
+	elif direction == 'v':
+			for check_y in range(check_y, check_y + VESSEL_SIZE[index]):
+				if grid[check_x][check_y] !='~':
+						no_overlap = 'false';
+						break;
+						
+	return no_overlap;
+
 # checks if the location is valid
 def validate_location(index):
 	global x; # this function can edit x
@@ -97,9 +118,17 @@ def validate_location(index):
 	# check if string is a single letter or smaller than a three digit number, if not, asks for input again, then checks
 	# checks if location is on the board and if the ship will fit, if not asks for input again and checks again
 	if (direction == 'h') and (-1 < x < (GRID_WIDTH - VESSEL_SIZE[index])) and (-1 < y < GRID_HEIGHT):
-		place_vessel(index);
+		if has_overlap(index) == 'true':
+			place_vessel(index);
+		else:
+			get_location(index);
+			validate_location(index);
 	elif direction == 'v' and (-1 < y < (GRID_HEIGHT - VESSEL_SIZE[index])) and (-1 < x < GRID_WIDTH):  
-		place_vessel(index);
+		if has_overlap(index) == 'true':
+			place_vessel(index);
+		else:
+			get_location(index);
+			validate_location(index);
 	else:
 		get_location(index);
 		validate_location(index);
