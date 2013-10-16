@@ -7,7 +7,10 @@ row=1
 color='white'
 x=0
 y=0
+
+
 def show_title():#Printing initialziation - intro screen
+
         print('###################################################')
         print('#    #   ###  #=# #==   #   #   \ / ###  === #==  #')
         print('#   #=#  #==# # # #    #=#  #    #  #==# \=  #=   #')
@@ -18,22 +21,26 @@ def show_title():#Printing initialziation - intro screen
         print()
         print('~~~~~~~~\Created by the Apocalyptic Pirates/~~~~~~~')
         print('~~~~~~~~~\________copyright 2013(c)_______/~~~~~~~~')
+        
 
 def input_location(color,name): #Function, gets input from user
+
         #Global variables
         global column
         global row
         
         #Prompt for user input
-        print ('please indicate the column, and row at which the', color,name, 'will be placed at')
+        print ('Please indicate the column, and row at which the', color,name, 'will be placed at:')
         column= input('column (a-e): ')
-        row= input(' row (1-5): ')
-        
+        row= input('row (1-5): ')
+        print()
+
         #Call to validate location
         validate_input()
 
 		
 def validate_input(): #Validates location and prompts user to fix error
+
        #Global variables
        global row
        global column
@@ -64,12 +71,12 @@ def validate_input(): #Validates location and prompts user to fix error
 
 def print_location(player,color,name): #Prints location
 		
-		row1 = row + 1
-		column1 = chr(column + ord('a'))
-		print("The Location of the piece is(x, y): ", column1, row1,)
+		print("The location of the " + color + ' ' + name + " is (", chr(column + ord('a')), ',',  str(row + 1), ')')
+		print()
 
 
 def modify(player): 
+	
         #setting global variables
         global column
         global row
@@ -84,17 +91,16 @@ def modify(player):
         	print_location(player, color, name)
         else:
         	return
+        
 
 def main():
+	
 	#Setting global variables
         global color
         global x
         global y
-        global player
-        
-        #Setting player to one; redundant, but whatever.
-        player = 'one'
-        
+        global name
+
         show_title() #Prints titlescreen
         input_location('white','pawn') #Inputs user row, column location
         
@@ -103,7 +109,11 @@ def main():
         y=1
         color='black'
         modify('two')
+
+        name = 'knight'
         x=1
         y=1
         modify('two')
+        
+        
 main()
