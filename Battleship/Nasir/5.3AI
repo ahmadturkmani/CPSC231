@@ -1,0 +1,238 @@
+###Battleship Ex.5.3
+###Author: Nasir Osman
+###Course: CPSC 231 Lec 01
+###Group: Tut 02 Group 5 
+
+import random
+
+#-------------------------------------------------#
+#----------------GLOBAL VARIABLES-----------------#
+#-------------------------------------------------#
+
+#Here we'll define our both our global variables and constants
+
+GRID_WIDTH = 10
+GRID_HEIGHT = 10
+VESSEL_NAMES = ['aircraft carrier','battleship','submarine','destroyer']
+VESSEL_SIZES = [5,4,3,2]
+NUM_OF_VESSELS = 4
+
+#Default values 
+
+column = ord('A')
+row = 0 
+
+w = '-'
+#A 10x10 for our playing field where 'w' represents water
+Grid =      [[w,w,w,w,w,w,w,w,w,w], \
+		        [w,w,w,w,w,w,w,w,w,w], \
+		        [w,w,w,w,w,w,w,w,w,w], \
+		        [w,w,w,w,w,w,w,w,w,w], \
+		        [w,w,w,w,w,w,w,w,w,w], \
+		        [w,w,w,w,w,w,w,w,w,w], \
+		        [w,w,w,w,w,w,w,w,w,w], \
+		        [w,w,w,w,w,w,w,w,w,w], \
+		        [w,w,w,w,w,w,w,w,w,w], \
+	        	[w,w,w,w,w,w,w,w,w,w], \
+		        ]
+		
+#----------------------------------------------------------#
+#----------------GLOBAL METHODS(Functions)-----------------#
+#----------------------------------------------------------#
+
+def title_screen():
+	screen = """                                                                                   
+    ______________________________________________________________________________ 
+   /_____/_____/_____/_____/_____/_____/_____/_____/_____/_____/_____/_____/_____/ 
+  ._.   __________         __    __  .__                .__    .__             ._. 
+  | |   \______   \_____ _/  |__/  |_|  |   ____   _____|  |__ |__|_____       | | 
+  |_|    |    |  _/\__  \\   __\   __\  | _/ __ \ /  ___/  |  \|  \____ \      |_| 
+  |-|    |    |   \ / __ \|  |  |  | |  |_\  ___/ \___ \|   Y  \  |  |_> >     |-| 
+  | |    |______  /(____  /__|  |__| |____/\___  >____  >___|  /__|   __/      | | 
+  |_|           \/      \/                     \/     \/     \/   |__|         |_| 
+                      ._.  ._.  ._.  ._.  ._.  ._.  ._.  ._.  ._.                  
+                      | |  | |  | |  | |  | |  | |  | |  | |  | |                  
+                      |_|  |_|  |_|  |_|  |_|  |_|  |_|  |_|  |_|                  
+                      |-|  |-|  |-|  |-|  |-|  |-|  |-|  |-|  |-|                  
+                      | |  | |  | |  | |  | |  | |  | |  | |  | |                  
+                      |_|  |_|  |_|  |_|  |_|  |_|  |_|  |_|  |_|                  
+                                         ._.                                       
+                                         | |                                       
+                                         |_|                                       
+                                         |-|                                       
+                                         | |                                       
+                                         |_|                                       
+                                                                                   
+                                                                                   
+                   The unfinished version 
+				   (c) 2013   
+		  
+		         
+			"""
+			
+	print(screen)
+	print("Welcome to Battleship!")
+	print()
+
+
+def print_grid():
+    print('__________________________');
+    print('|  | A B C D E F G H I J |');
+    print('--------------------------');
+    row = 0;
+    column = 0;
+    for row in range(GRID_HEIGHT):
+        if row  == 9:
+          print( '|' + str(row + 1) + '| ', end = '');
+        else:
+          print( '|0' + str(row + 1) + '| ', end = '');                        
+        for column in range(0, GRID_WIDTH):
+          print(grid[column][row] + ' ', end = '');
+        print('|');
+    print();
+
+
+
+
+#Places vessel onto the grid
+def add_vessel(index):
+	global column
+	global row
+	global direction
+	
+	if direction =='h':
+    for column in range(column, column + VESSEL_SIZES[index]):
+		  Grid[column][row] = str(VESSEL_SIZES[index])
+  elif direction =='v':
+	  for row in range(row, row + VESSEL_SIZES[index]):
+      Grid[column][row] = str(VESSEL_SIZES[index])
+			
+#Method for the AI to select co-ordinates for the vessel
+def get_coordinates(index):
+    global column
+    global row
+    global direction
+	
+    #Randomly assigns a number to each value
+    column = random.randint(0,9)
+    row = random.randint(0,9)
+    direction = random.randint(1,2)
+	
+    #Direction is randomly selected, where 1 represents horizontal and 2 is vertical
+    if direction == 1:
+        direction == 'h'
+    else:
+        direction == 'v'
+		
+		
+#Checks if vessel intersects with another
+        
+def has_overlap(index):
+    test_x = x
+    test_y = y 
+	
+    #Boolean value set to false by default
+    overlap = 'False'
+	
+    #Check if vessel overlaps in the horizontal direction
+    if direction =='h':
+    #From the chosen column to the endpoint, we check if the spaces are empty
+	    for test_x in range(test_x, test_x + VESSEL_SIZES[index]):
+	      if Grid[test_x][test_y]!= '-':
+		      overlap = 'True'
+		      return overlap
+	
+    elif direction =='v'
+    #We do the same above but in the vertical direction
+	    for test_y in range(test_y, test_y + VESSEL_SIZES[index]):
+	      if Grid(test_x][test_y]!= '-':
+		      overlap = 'True'
+		      return overlap
+				
+    return overlap
+
+#Validates the input by the AI
+def validate_coordinates(index):
+    global column
+    global row
+    global direction
+	
+    #Row and column lower limit 
+    LOWER_BOUND = -1
+	
+    #Test to see if ship will fit if placed horizontally
+	
+    if direction =='h':
+	    if (COLUMN_LOWERBOUND < column < GRID_WIDTH - VESSEL_SIZES[index]):
+	      if has_overlap ='True':
+		      get_coordinates(index)
+		      validate_coordinates(index)
+	      else:
+		      add_vessel(index)
+	
+	    else:
+        print("Error, the ship will not fit onto the board at this location")
+	      get_coordinates(index)
+	      validate_coordinates(index)
+	
+    elif direction =='v':
+	    if(LOWER_BOUND < row < GRID_LENGTH - VESSEL_SIZES[index]):
+	      if has_overlap ='True':
+		      get_coordinates(index)
+		      validate_coordinates(index)
+         else:
+            add_vessel(index)
+	    else:
+	      print("Error, the ship will not fit onto the board at this location")
+	      get_coordinates(index)
+	      validate_coordiantes(index)
+			
+			
+
+def has_overlap(index):
+    test_x = x
+    test_y = y 
+	
+    #Boolean value set to false by default
+    overlap = 'False'
+	
+    #Check if vessel overlaps in the horizontal direction
+    if direction =='h':
+    #From the chosen column to the endpoint, we check if the spaces are empty
+    	for test_x in range(test_x, test_x + VESSEL_SIZES[index]):
+	     if Grid[test_x][test_y]!= '-':
+	    	overlap = 'True'
+        return overlap
+	
+    elif direction =='v'
+	
+    #We do the same above but in the vertical direction
+      for test_y in range(test_y, test_y + VESSEL_SIZES[index]):
+	      if Grid(test_x][test_y]!= '-':
+		     overlap = 'True'
+		     return overlap
+				
+    return overlap
+			
+def print_menu():
+    choice = input("Enter choice:")
+    while True:
+	    if choice =='q':
+	    break;
+		
+
+
+def main():
+    title_screen()
+    print_grid()
+	
+    x = 0 
+    for x in range(5):
+	    get_coordinates(x)
+    	validate_coordinates(x)
+	    print_grid()
+	
+    print_menu()
+	
+		
+main()	
