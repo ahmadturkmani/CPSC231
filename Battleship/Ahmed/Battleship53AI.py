@@ -31,7 +31,23 @@ grid = 		[
 			[w,w,w,w,w,w,w,w,w,w],
 			[w,w,w,w,w,w,w,w,w,w],
 			[w,w,w,w,w,w,w,w,w,w]];
-			
+	
+# Title Screen! Now a function!
+def print_titlescreen():
+	global NAME;
+	print();
+	print('________________________________________');
+	print('|*********WELCOME TO BATTLESHIP!*******|');
+	print('|**************************************|');
+	print('|**************************************|');
+	print('|*********A game like no other!********|');
+	print('|**************************************|');
+	print('|**************************************|');
+	print('|**************************************|');
+	print();
+	print();
+# end
+
 # print out the grid			
 def print_grid():
 	print('__________________________');
@@ -48,22 +64,7 @@ def print_grid():
 			print(grid[column][row] + ' ', end = '');
 		print('|');
 	print();
-			
-# Title Screen! Now a function!
-def print_titlescreen():
-	global NAME;
-	print();
-	print('________________________________________');
-	print('|*********WELCOME TO BATTLESHIP!*******|');
-	print('|**************************************|');
-	print('|**************************************|');
-	print('|*********A game like no other!********|');
-	print('|**************************************|');
-	print('|**************************************|');
-	print('|**************************************|');
-	print();
-	print();
-# end
+# end		
 
 # let's the ai choose where to place vessel
 def get_location(index):
@@ -89,11 +90,12 @@ def place_vessel(index):
 	elif direction == 'v':
 			for y in range(y, y + VESSEL_SIZE[index]):
 				grid[x][y] = str(VESSEL_SIZE[index]);
+# end
 
-# put vessel on board
+# checks all prospective spaces for vessels (returns 'true' or 'false')
 def has_overlap(index):
-	
-	check_x = x;
+	# TEMP VARIABLES
+	check_x = x; 
 	check_y = y;
 	no_overlap = 'true';
 	
@@ -110,6 +112,7 @@ def has_overlap(index):
 						break;
 						
 	return no_overlap;
+# end
 
 # checks if the location is valid
 def validate_location(index):
@@ -132,6 +135,7 @@ def validate_location(index):
 	else:
 		get_location(index);
 		validate_location(index);
+#end
 	
 	
 # doesn't quit unless q is entered	
@@ -139,6 +143,7 @@ def enter_choice():
 	choice = '';
 	while not choice == 'q':
 		choice = input('Enter choice: ');
+#end
 		
 # now put it all together!
 def main():
