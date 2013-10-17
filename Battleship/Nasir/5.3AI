@@ -24,7 +24,7 @@ row = 0
 
 w = '-'
 #A 10x10 for our playing field where 'w' represents water
-Grid =      [[w,w,w,w,w,w,w,w,w,w], \
+Grid =      		[[w,w,w,w,w,w,w,w,w,w], \
 		        [w,w,w,w,w,w,w,w,w,w], \
 		        [w,w,w,w,w,w,w,w,w,w], \
 		        [w,w,w,w,w,w,w,w,w,w], \
