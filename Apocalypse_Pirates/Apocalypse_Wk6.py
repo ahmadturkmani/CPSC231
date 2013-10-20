@@ -106,6 +106,18 @@ def validate_input(): #Validates location and prompts user to fix error
            print("You have entered invalid coordinates")
            input_location(color,name)
 
+#Make sure where player is moving is a valid move for the pawn/knight
+def validate_move(index):
+	if 0 <= index < 5:
+		valid_move1 = PIECEWI[index] - GRID_WIDTH
+		if valid_move1 == ((GRID_WIDTH * y) + x):
+			return True
+		else:
+			print("Move invalid, piece will not be moved. Penalty point awarded.")
+			return False
+	#elif 5 <= index < 7:
+	#	valid_move2 = grid[PIECEWI[index]]
+
 def print_location(player,color,name): #Prints location
 		
 		print("The location of the " + color + ' ' + name + " is (", chr(x + ord('a')), ',',  str(y + 1), ')')
@@ -174,12 +186,19 @@ def enter_choice():
 def main():
 	show_title() #Prints titlescreen
 	set_board()
-	while True:
+	g = '0' 
+	while g == '0' :
 		select_piece('white')
 		input_location('white', PIECEW[index])
-		store_piece(x, y, index, 'white')
-		clear_grid()	
-		set_board()
-		print_grid()
+		if validate_move(index):
+			store_piece(x, y, index, 'white')
+			clear_grid()
+			set_board()
+			print_grid()
+			print("True")
+		if not validate_move(index):
+			print("False")
+			continue
+			
 			        
 main()
