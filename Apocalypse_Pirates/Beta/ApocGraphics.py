@@ -33,7 +33,7 @@ cfg.TER_SIZE = 192
 cfg.col = ord('A');
 cfg.row = 0;
 
-# grid
+# grid stuff
 cfg.empty = 'X' 
 cfg.grid = [ [cfg.empty for i in range (cfg.BOARD_W)] for j in range(cfg.BOARD_H)]
 	
