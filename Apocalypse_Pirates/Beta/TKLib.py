@@ -58,10 +58,10 @@ class Entry(widget):
 class Button(widget):
 
 	# _command is the function to execute when pressed
-	def init(self, text, _command):
+	def init(self, text, _command, _state):
 	
 		self.text = text
-		self.name = ttk.Button(self.parent, text = self.text, command = _command)
+		self.name = ttk.Button(self.parent, text = self.text, command = _command, state = _state)
 		self.name.place(x = self.x, y = self.y, width = self.w, height = self.h)
 
 # A label
