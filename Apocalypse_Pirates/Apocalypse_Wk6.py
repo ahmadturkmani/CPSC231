@@ -56,9 +56,6 @@ def select_piece(player):
 		print("You have entered an invalid piece, please try again.")
 		select_piece(player)
 		
-				
-	
-
 
 def input_location(color,name): #Function, gets input from user
 
@@ -117,18 +114,20 @@ def print_location(player,color,name): #Prints location
 
 def store_piece(x, y, index, player):
 	global grid
-	
+	global PIECEWI
 	if y > 0:
 		x_pos = ((GRID_WIDTH * y) + x)
 		print(x_pos)
-		grid[x_pos] = piece[index]
+		#grid[x_pos] = PIECEW[index]
+		PIECEWI[index] = x_pos
 
 	else:
 		x_pos = x
-		grid[x_pos] = 't'
+		#grid[x_pos] = PIECEW[index]
 		print(x_pos)
+		PIECEWI[index] = x_pos
 			
-	
+
 def print_grid():
 	global grid
 	print('________________')
@@ -143,6 +142,14 @@ def print_grid():
 			print(grid[x_pos] + ' ', end = '')
 		print('|')
 		print()
+		
+def clear_grid():
+	global grid
+	for i in range(0, GRID_HEIGHT):
+		for e in range(0, GRID_WIDTH):
+			pos = (i * 5) + e
+			grid[pos] = 'b'
+		
 
 def set_board():
 	keep_running = True
@@ -171,6 +178,8 @@ def main():
 		select_piece('white')
 		input_location('white', PIECEW[index])
 		store_piece(x, y, index, 'white')
+		clear_grid()	
+		set_board()
 		print_grid()
 			        
 main()
