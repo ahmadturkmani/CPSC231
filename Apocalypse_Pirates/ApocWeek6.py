@@ -28,6 +28,7 @@ def show_title():#Printing initialziation - intro screen
         print('~~~~~~~~~\________copyright 2013(c)_______/~~~~~~~~')
         print()
 
+# changes a 2d index to a 1d index in a list
 def List2Dto1D(row, col):
 	return (col + (row * GRID_WIDTH))
 
