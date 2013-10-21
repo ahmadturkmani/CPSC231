@@ -1,4 +1,4 @@
-#This program is the 5th week submission for Tutorial 2 Group 5's game apocalypse
+#This program is the 6th week submission for Tutorial 2 Group 5's game apocalypse
 #####################################################################################
 
 #CONSTANTS
@@ -74,14 +74,17 @@ def get_move():
 	
 	print_board()
 
-	# promt user to choose piece to move
+	# Prompt user to choose piece to move
 	print('Where is the piece you would like to move located?')
 	col = ord(input('COLUMN\t(A-E):').lower()) - ord('a')
 	row = int(input('ROW \t(1-5):')) - 1
 	print()
 	
+	# Checks if user's location is on the board 
 	if 0 <= row < GRID_HEIGHT and 0 <= col < GRID_WIDTH:
+		# Checks if chosen location isn't blank
 		if grid[row * GRID_WIDTH + col] != b:
+			#If space has either a white pawn or white knight
 			if grid[row * GRID_WIDTH + col] == 'WK' or grid[row * GRID_WIDTH + col] == 'WP':
 				get_endmove(row, col, grid[row * GRID_WIDTH + col])
 			else:
@@ -95,13 +98,14 @@ def get_move():
 		get_move()
 		
 		
-# asks user to place the piece selected in get_move() ###
+# Asks user to place the piece selected in get_move() ###
 def get_endmove(row, col, piece):
 
 	print('Where would you like to move your piece? (' + piece + ' at ' + (chr(col + ord('a')).upper()) + str(row + 1) + ')')
 	new_col = ord(input('COLUMN\t(A-E):').lower()) - ord('a')
 	new_row = int(input('ROW \t(1-5):')) - 1
 	
+	#Check if new location is within the grid 
 	if 0 <= row < GRID_HEIGHT and 0 <= col < GRID_WIDTH:
 		
 		if validate_move(row, col, new_row, new_col, piece):
@@ -120,11 +124,13 @@ def get_endmove(row, col, piece):
 		
 ## Checks if the move is valid according to piece type ####	
 def validate_move(row, col, new_row, new_col, piece):
-	
+	#If piece selected is a white knight
 	if piece == 'WK':
+		# We check
 		for i in range(8):	
 			if (new_col == col + KNIGHT_MOVE[i][0]) and (new_row == row + KNIGHT_MOVE[i][1]) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP') or (grid[new_col + new_row * GRID_WIDTH] == b)):
-				return True			
+				return True
+	#If piece is a white pawn
 	elif piece == 'WP':
 		if (new_col == col) and (new_row == row - 1) and (grid[new_col + new_row * GRID_WIDTH] == b):
 			return True
