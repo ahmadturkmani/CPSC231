@@ -131,6 +131,7 @@ def get_endmove(row, col, piece):
 		if validate_move(row, col, new_row, new_col, piece):
 			grid[List2Dto1D(new_row, new_col)] = piece
 			grid[List2Dto1D(row, col)] = b
+			print('Moved ' + piece + ' from ' + chr(col + ord('a')).upper() + str(row) + ' to ' + chr(new_col + ord('a')).upper() + str(new_row) + '.\n' )
 			print_board()
 		
 		# if not valid, tell the player. Then ask again where they want to move
