@@ -6,10 +6,10 @@ GRID_HEIGHT = 5
 GRID_WIDTH = 5
 NUM_OF_PIECES = 7 # number of pieces for each side
 PIECE_W_START = [15, 21, 22, 23, 19, 20, 24] # starting location for white pieces
-PIECE_W = ['WP', 'WP', 'WP', 'WP', 'WP', 'WK', 'WK']
-PIECE_B_START = [5, 1, 2, 3 ,9, 0, 4]
-PIECE_B = ['BP', 'BP', 'BP', 'BP', 'BP', 'BK', 'BK']
-KNIGHT_MOVE = [[2,1], [2,-1], [-2,1], [-2,-1], [1,2], [1,-2], [-1,2], [-1,-2]]
+PIECE_W = ['WP', 'WP', 'WP', 'WP', 'WP', 'WK', 'WK'] # white pieces
+PIECE_B_START = [5, 1, 2, 3 ,9, 0, 4] # starting location for white pieces
+PIECE_B = ['BP', 'BP', 'BP', 'BP', 'BP', 'BK', 'BK'] # black pieces
+KNIGHT_MOVE = [[2,1], [2,-1], [-2,1], [-2,-1], [1,2], [1,-2], [-1,2], [-1,-2]] # all moves a knight can make
 # grid
 b = '[]'
 grid = [b for i in range(GRID_WIDTH * GRID_HEIGHT)]
@@ -28,14 +28,20 @@ def show_title():#Printing initialziation - intro screen
         print('~~~~~~~~~\________copyright 2013(c)_______/~~~~~~~~')
         print()
 
+def List2Dto1D(row, col):
+	return (col + (row * GRID_WIDTH))
+
 # puts all pieces on board
 def setup_board():
+	
+	# place pieces on board according to thier locations in the arrays
 	for i in range(7):
 		grid[PIECE_W_START[i]] = PIECE_W[i]
 		grid[PIECE_B_START[i]] = PIECE_B[i]
 
 # prints out the grid		
 def print_board():
+
 	# board header
 	print('__________________________');
 	print('|  |  A  B  C  D  E |');
@@ -44,10 +50,12 @@ def print_board():
 	for row in range(GRID_HEIGHT):
 		# print row number
 		print( '|0' + str(row + 1) + '| ', end = '');
+
 		# print entire row on one line
 		for col in range(GRID_WIDTH):
-			print(grid[col + (row * GRID_WIDTH)] + ' ', end = '');
+			print(grid[List2Dto1D(row, col)] + ' ', end = '');
 		print('|');
+
 	print();
 	print('WP = White Pawn \t WK = White Knight') # tell user what piece is what
 	print('BP = Black Pawn \t BK = Black Knight') 
@@ -82,17 +90,27 @@ def get_move():
 	
 	# Checks if user's location is on the board 
 	if 0 <= row < GRID_HEIGHT and 0 <= col < GRID_WIDTH:
+
 		# Checks if chosen location isn't blank
-		if grid[row * GRID_WIDTH + col] != b:
+		if grid[List2Dto1D(row, col)] != b:
+
 			#If space has either a white pawn or white knight
-			if grid[row * GRID_WIDTH + col] == 'WK' or grid[row * GRID_WIDTH + col] == 'WP':
-				get_endmove(row, col, grid[row * GRID_WIDTH + col])
+			if grid[List2Dto1D(row, col)] == 'WK' or grid[List2Dto1D(row, col)] == 'WP':
+
+				# ask where the user wants to place this piece
+				get_endmove(row, col, grid[List2Dto1D(row, col)])
+
+			# dont try stealin other pieces
 			else:
 				print("That's not your piece!\n")
 				get_move()
+
+		# can't select an empty space
 		else:
 			print('That space is empty.\n')
 			get_move()
+
+	# can't choose a place in China
 	else:
 		print('Not on the board!\n')
 		get_move()
@@ -108,15 +126,18 @@ def get_endmove(row, col, piece):
 	#Check if new location is within the grid 
 	if 0 <= row < GRID_HEIGHT and 0 <= col < GRID_WIDTH:
 		
+		# if move is valid, then move the piece
 		if validate_move(row, col, new_row, new_col, piece):
-			grid[new_col + new_row * GRID_WIDTH] = piece
-			grid[col + row * GRID_WIDTH] = b
+			grid[List2Dto1D(new_row, new_col)] = piece
+			grid[List2Dto1D(row, col)] = b
 			print_board()
-			
+		
+		# if not valid, tell the player. Then ask again where they want to move
 		else:
 			print("Not a valid move!\n")
 			get_endmove(row, col, piece)
-			
+	
+	# same as above		
 	else:
 		print('Not on the board!\n')
 		get_endmove(row, col, piece)
@@ -124,27 +145,44 @@ def get_endmove(row, col, piece):
 		
 ## Checks if the move is valid according to piece type ####	
 def validate_move(row, col, new_row, new_col, piece):
+
 	#If piece selected is a white knight
 	if piece == 'WK':
+
 		# We check if the knight is moving in an L-shape, and if the spot is either empty or has an enemy piece
 		for i in range(8):	
-			if (new_col == col + KNIGHT_MOVE[i][0]) and (new_row == row + KNIGHT_MOVE[i][1]) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP') or (grid[new_col + new_row * GRID_WIDTH] == b)):
+			if (new_col == col + KNIGHT_MOVE[i][0]) and (new_row == row + KNIGHT_MOVE[i][1]) and ((grid[List2Dto1D(new_row, new_col)] == 'BK') or (grid[List2Dto1D(new_row, new_col)] == 'BP') or (grid[List2Dto1D(new_row, new_col)] == b)):
+				
+				# if enemy is killed, taunt them!
+				if (grid[List2Dto1D(new_row, new_col)] == 'BK' or grid[List2Dto1D(new_row, new_col)] == 'BP'): 
+					print('~(o_o)~ Ooh, kill em! ~(o_o)~')
 				return True
 	#If piece is a white pawn
 	elif piece == 'WP':
+
 		# If there's nothing in front of the piece, move it up 
-		if (new_col == col) and (new_row == row - 1) and (grid[new_col + new_row * GRID_WIDTH] == b):
+		if (new_col == col) and (new_row == row - 1) and (grid[List2Dto1D(new_row, new_col)] == b):
 			return True
+
 	        # If there is an enemy to the top right, kill it 
-		elif (new_col == col + 1) and (new_row == row - 1) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP')):
+		elif (new_col == col + 1) and (new_row == row - 1) and ((grid[List2Dto1D(new_row, new_col)] == 'BK') or (grid[List2Dto1D(new_row, new_col)] == 'BP')):
+			print('~(o_o)~ Ooh, kill em! ~(o_o)~')
 			return True
+
 		# If there is an enemy to the top left, kill it 
-		elif (new_col == col - 1) and (new_row == row - 1) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP')):
+		elif (new_col == col - 1) and (new_row == row - 1) and ((grid[List2Dto1D(new_row, new_col)] == 'BK') or (grid[List2Dto1D(new_row, new_col)] == 'BP')):
+			print('~(o_o)~ Ooh, kill em! ~(o_o)~')
 			return True
 	
 def main():
+	
+	# add pieces to board
 	setup_board()
+
+	# print the board
 	print_board()
+
+	# game loop. Play till user decides to quit
 	while get_choice():
 			pass
 			
