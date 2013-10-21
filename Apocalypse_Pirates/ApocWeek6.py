@@ -178,11 +178,11 @@ def validate_move(row, col, new_row, new_col, piece):
 
 def get_winner():
 	if_won = True
-	for i in range(GRID_HEIGHT * GRID WIDTH):
-		if (grid[i] == "BP" or grid[i] ==  "BK"):
+	for i in range(GRID_HEIGHT * GRID_WIDTH):
+		if grid[i] == "BP" or grid[i] ==  "BK":
 			if_won = False
 	if if_won == True:
-		print('You Won!!!')
+		print(	'/---------------------------\\n|----------YOU WIN!----------|\n==============================\n| | | | | | | | | | | | | | ||\n******************************\n             | |                \n       ==============')
 
 def main():
 	
@@ -194,6 +194,6 @@ def main():
 
 	# game loop. Play till user decides to quit
 	while get_choice():
-			pass
+			get_winner()
 			
 main()
