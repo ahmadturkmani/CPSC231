@@ -33,7 +33,8 @@ def setup_board():
 	for i in range(7):
 		grid[PIECE_W_START[i]] = PIECE_W[i]
 		grid[PIECE_B_START[i]] = PIECE_B[i]
-		
+
+# prints out the grid		
 def print_board():
 	# board header
 	print('__________________________');
@@ -43,17 +44,17 @@ def print_board():
 	for row in range(GRID_HEIGHT):
 		# print row number
 		print( '|0' + str(row + 1) + '| ', end = '');
-		# print 
+		# print entire row on one line
 		for col in range(GRID_WIDTH):
 			print(grid[col + (row * GRID_WIDTH)] + ' ', end = '');
 		print('|');
 	print();
-	print('WP = White Pawn \t WK = White Knight')
-	print('BP = Black Pawn \t BK = Black Knight')
+	print('WP = White Pawn \t WK = White Knight') # tell user what piece is what
+	print('BP = Black Pawn \t BK = Black Knight') 
 	print()
 
-# end	
 
+# asks user to move or quit ###
 def get_choice():
 	print('[M]ove\n[Q]uit')
 	move = input('What is you choice:').lower()
@@ -66,13 +67,19 @@ def get_choice():
 	else:
 		print('Invalid\n')
 		return True
-
+		
+		
+# asks user to select a piece to move ###
 def get_move():
+	
 	print_board()
+
+	# promt user to choose piece to move
 	print('Where is the piece you would like to move located?')
 	col = ord(input('COLUMN\t(A-E):').lower()) - ord('a')
 	row = int(input('ROW \t(1-5):')) - 1
 	print()
+	
 	if 0 <= row < GRID_HEIGHT and 0 <= col < GRID_WIDTH:
 		if grid[row * GRID_WIDTH + col] != b:
 			if grid[row * GRID_WIDTH + col] == 'WK' or grid[row * GRID_WIDTH + col] == 'WP':
@@ -86,7 +93,9 @@ def get_move():
 	else:
 		print('Not on the board!\n')
 		get_move()
-
+		
+		
+# asks user to place the piece selected in get_move() ###
 def get_endmove(row, col, piece):
 
 	print('Where would you like to move your piece? (' + piece + ' at ' + (chr(col + ord('a')).upper()) + str(row + 1) + ')')
@@ -94,20 +103,24 @@ def get_endmove(row, col, piece):
 	new_row = int(input('ROW \t(1-5):')) - 1
 	
 	if 0 <= row < GRID_HEIGHT and 0 <= col < GRID_WIDTH:
+		
 		if validate_move(row, col, new_row, new_col, piece):
 			grid[new_col + new_row * GRID_WIDTH] = piece
 			grid[col + row * GRID_WIDTH] = b
 			print_board()
+			
 		else:
 			print("Not a valid move!\n")
 			get_endmove(row, col, piece)
+			
 	else:
 		print('Not on the board!\n')
 		get_endmove(row, col, piece)
 		
+		
 ## Checks if the move is valid according to piece type ####	
 def validate_move(row, col, new_row, new_col, piece):
-
+	
 	if piece == 'WK':
 		for i in range(8):	
 			if (new_col == col + KNIGHT_MOVE[i][0]) and (new_row == row + KNIGHT_MOVE[i][1]) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP') or (grid[new_col + new_row * GRID_WIDTH] == b)):
