@@ -9,6 +9,7 @@ PIECE_W_START = [15, 21, 22, 23, 19, 20, 24] # starting location for white piece
 PIECE_W = ['WP', 'WP', 'WP', 'WP', 'WP', 'WK', 'WK']
 PIECE_B_START = [5, 1, 2, 3 ,9, 0, 4]
 PIECE_B = ['BP', 'BP', 'BP', 'BP', 'BP', 'BK', 'BK']
+KNIGHT_MOVE = [[2,1], [2,-1], [-2,1], [-2,-1], [1,2], [1,-2], [-1,2], [-1,-2]]
 # grid
 b = '[]'
 grid = [b for i in range(GRID_WIDTH * GRID_HEIGHT)]
@@ -108,22 +109,9 @@ def get_endmove(row, col, piece):
 def validate_move(row, col, new_row, new_col, piece):
 
 	if piece == 'WK':
-		if (new_col == col - 1) and (new_row == row - 2) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP') or (grid[new_col + new_row * GRID_WIDTH] == b)):
-			return True
-		elif (new_col == col + 1) and (new_row == row - 2) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP') or (grid[new_col + new_row * GRID_WIDTH] == b)):
-			return True
-		elif (new_col == col - 1) and (new_row == row + 2) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP') or (grid[new_col + new_row * GRID_WIDTH] == b)):
-			return True		
-		elif (new_col == col + 1) and (new_row == row + 2) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP') or (grid[new_col + new_row * GRID_WIDTH] == b)):
-			return True		
-		elif (new_col == col - 2) and (new_row == row - 1) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP') or (grid[new_col + new_row * GRID_WIDTH] == b)):
-			return True		
-		elif (new_col == col - 2) and (new_row == row + 1) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP') or (grid[new_col + new_row * GRID_WIDTH] == b)):
-			return True		
-		elif (new_col == col + 2) and (new_row == row - 1) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP') or (grid[new_col + new_row * GRID_WIDTH] == b)):
-			return True		
-		elif (new_col == col + 2) and (new_row == row + 1) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP') or (grid[new_col + new_row * GRID_WIDTH] == b)):
-			return True			
+		for i in range(8):	
+			if (new_col == col + KNIGHT_MOVE[i][0]) and (new_row == row + KNIGHT_MOVE[i][1]) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP') or (grid[new_col + new_row * GRID_WIDTH] == b)):
+				return True			
 	elif piece == 'WP':
 		if (new_col == col) and (new_row == row - 1) and (grid[new_col + new_row * GRID_WIDTH] == b):
 			return True
