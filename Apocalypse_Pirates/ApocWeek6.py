@@ -174,7 +174,15 @@ def validate_move(row, col, new_row, new_col, piece):
 		elif (new_col == col - 1) and (new_row == row - 1) and ((grid[List2Dto1D(new_row, new_col)] == 'BK') or (grid[List2Dto1D(new_row, new_col)] == 'BP')):
 			print('~(o_o)~ Ooh, kill em! ~(o_o)~')
 			return True
-	
+
+def get_winner():
+	if_won = True
+	for i in range(GRID_HEIGHT * GRID WIDTH):
+		if (grid[i] == "BP" or grid[i] ==  "BK"):
+			if_won = False
+	if if_won == True:
+		print('You Won!!!')
+
 def main():
 	
 	# add pieces to board
