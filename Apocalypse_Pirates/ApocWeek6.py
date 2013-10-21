@@ -126,16 +126,19 @@ def get_endmove(row, col, piece):
 def validate_move(row, col, new_row, new_col, piece):
 	#If piece selected is a white knight
 	if piece == 'WK':
-		# We check
+		# We check if the knight is moving in an L-shape, and if the spot is either empty or has an enemy piece
 		for i in range(8):	
 			if (new_col == col + KNIGHT_MOVE[i][0]) and (new_row == row + KNIGHT_MOVE[i][1]) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP') or (grid[new_col + new_row * GRID_WIDTH] == b)):
 				return True
 	#If piece is a white pawn
 	elif piece == 'WP':
+		# If there's nothing in front of the piece, move it up 
 		if (new_col == col) and (new_row == row - 1) and (grid[new_col + new_row * GRID_WIDTH] == b):
 			return True
+	        # If there is an enemy to the top right, kill it 
 		elif (new_col == col + 1) and (new_row == row - 1) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP')):
 			return True
+		# If there is an enemy to the top left, kill it 
 		elif (new_col == col - 1) and (new_row == row - 1) and ((grid[new_col + new_row * GRID_WIDTH] == 'BK') or (grid[new_col + new_row * GRID_WIDTH] == 'BP')):
 			return True
 	
