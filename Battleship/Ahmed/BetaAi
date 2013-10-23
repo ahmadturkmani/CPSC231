@@ -1,0 +1,24 @@
+def is_Empty(column, row):
+	if column>0 ## Column is not zero
+ 	    if row == 0:
+	      if grid[column+1][row] == grid.B: #Check down and right
+	      elif grid[column][row+1] == grid.B:
+            elif row == GRID_LENGTH - 1: #Check only up and right
+	      if grid[column-1][row] == grid.B:
+              elif grid[column][row+1] == grid.B:
+
+            else: #check in all directions
+	       if grid[column-1][row] == grid.B:
+             elif grid[column+1][row] == grid.B:
+             elif grid[column][row+1] == grid.B:
+             elif grid[column][row-1] == grid.B:
+
+
+        elif row>0:
+	   if grid[column][row-1] == grid.B:	
+       
+def analyse_grid():
+	for i in range(GRID_HEIGHT):
+		for j in range(GRID_WIDTH):
+			if attack_grid[i][j] == 'X'
+				
