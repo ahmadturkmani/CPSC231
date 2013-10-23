@@ -9,9 +9,9 @@ def is_Empty(column, row):
 
             else: #check in all directions
 	       if grid[column-1][row] == grid.B:
-             elif grid[column+1][row] == grid.B:
-             elif grid[column][row+1] == grid.B:
-             elif grid[column][row-1] == grid.B:
+               elif grid[column+1][row] == grid.B:
+               elif grid[column][row+1] == grid.B:
+               elif grid[column][row-1] == grid.B:
 
 
         elif row>0:
