@@ -1,4 +1,3 @@
-
 import grid
 
 attack_grid = [ [grid.B for i in range(grid.GRID_WIDTH)] for j in range(grid.GRID_HEIGHT)]
