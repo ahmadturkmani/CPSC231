@@ -1,7 +1,8 @@
+
 import grid
 
-attack_grid = [ [grid.B for i in range(grid.GRID_WIDTH)] for j in range(grid.GRID_HEIGHT)]
-defend_grid = [ [grid.B for i in range(grid.GRID_WIDTH)] for j in range(grid.GRID_HEIGHT)]
+grid_attack = [ [grid.B for i in range(grid.GRID_WIDTH)] for j in range(grid.GRID_HEIGHT)]
+grid_defend = [ [grid.B for i in range(grid.GRID_WIDTH)] for j in range(grid.GRID_HEIGHT)]
 
 # let's the user choose where to place vessel
 def get_location(index):
@@ -12,7 +13,20 @@ def get_location(index):
 	print();
 	validate_location(index, row, col, dir)
 	
+def get_choice():
+	print("Where would you like to bomb the enemy") 
+	grid.print_grid(grid_attack)
+	print()
+	col = input("Horizontal bomb position?\t(A-J): ")
+	row = input("Vertical bomb position?\t (1-10): ")
+	if grid_attack[col, row] != '~'
+		get_choice()
+	else:
+		return col, row
 	
+
+
+
 def validate_location(index, row, col, dir):
 
 
