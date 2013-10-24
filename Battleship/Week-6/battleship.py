@@ -2,27 +2,42 @@
 #T2G5
 
 import grid
-import t2_g5_ai
+import ai
 import human
+
 
 def main():
 	
 	for i in range(grid.NUM_OF_VESSELS):
 		human.get_location(i)
-		t2_g5_ai.get_location(i)
-		grid.print_grid(t2_g5_ai.defend_grid)
-		grid.print_grid(human.defend_grid)
+		ai.get_location(i)
+		print("AI Grid:")
+		grid.print_grid(ai.grid_defend)
+		print("Human Grid:")
+		grid.print_grid(human.grid_defend)  
 
-	while not all_vessels_sunk():
+	while not (grid.all_vessels_sunk(ai.grid_defend) and grid.all_vessels_sunk(human.grid_defend)):
+		human.enter_choice()
 		row, col = human.get_choice()
-		grid.drop_bomb(human.attack_grid, t2_g5_ai.defend_grid, row, col)
+		grid.drop_bomb(ai.grid_defend, human.grid_attack, row, col)
 	
-		row, col = t2_g5_ai.get_choice()
-		grid.drop_bomb(t2_g5_ai.attack_grid, human.defend_grid, row, col)
-
+		row, col = ai.get_choice()
+		grid.drop_bomb(human.grid_defend, ai.grid_attack, row, col)
+		
+		print("AI Grid:")
+		grid.print_grid(ai.grid_defend)
+		print("Human Grid:")
+		grid.print_grid(human.grid_defend)  
+		print("AI Grid A:")
+		grid.print_grid(ai.grid_attack)
+		print("Human Grid A:")
+		grid.print_grid(human.grid_attack)  
+		
+		
 main()
 	
 	
 	
 
 
+	
