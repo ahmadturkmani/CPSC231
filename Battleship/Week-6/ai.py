@@ -50,6 +50,7 @@ def get_choice():
 		row, col = analyse_grid(found_ships)
 	else:
 		row, col = random_move()
+		
 	return row, col		
 	
 def random_move():
@@ -72,15 +73,15 @@ def analyse_grid(found_ships):
 		if col > 0:
 			if grid_attack[row][col - 1] == grid.B:
 				return row, (col - 1)
-			elif  row > 0:
-				if grid_attack[row - 1][col] == grid.B:
-					return (row - 1), (col)
-			elif col < 9:
-				if grid_attack[row][col + 1] == grid.B:
-					return row, (col + 1)
-			elif row < 9:
-				if grid_attack[row + 1][col] == grid.B:
-					return (row + 1), (col)
+		if  row > 0:
+			if grid_attack[row - 1][col] == grid.B:
+				return (row - 1), (col)
+		if col < 9:
+			if grid_attack[row][col + 1] == grid.B:
+				return row, (col + 1)
+		if row < 9:
+			if grid_attack[row + 1][col] == grid.B:
+				return (row + 1), (col)
 				
 	row, col = random_move()
 	return row, col
