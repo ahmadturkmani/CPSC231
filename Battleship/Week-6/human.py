@@ -30,9 +30,6 @@ def get_choice():
 	#User information pertaining to following steps
 	print("Where would you like to bomb the enemy") 
 	
-	#Printing grid, increase successful entry
-	grid.print_grid(grid_attack)
-	
 	print()
 	
 	#Getting input
@@ -45,7 +42,7 @@ def get_choice():
 	#there a move made there. If that is true, we call for a valid input
 	if grid_attack[col][row] != '~':
 		row, col = get_choice()
-	
+	print(row, col)
 	#If input equals '~' it is a valid move, therefore we return the values required back. 	
 	return row, col
 
@@ -55,9 +52,7 @@ def validate_location(index, row, col, dir):
 	#Converting row, and column into values that are workable using numbers.
 	col = (ord(col.upper()) - ord('A'))
 	row = (int(row) - 1)
-		
-	#Debugging
-	#print(row, col)	
+	
 	
 	
 	#Checks if horizontal and if the column and row don't go over
