@@ -7,12 +7,12 @@
 import grid
 import random
 
-attack_grid = [ [grid.B for i in range(grid.GRID_WIDTH)] for j in range(grid.GRID_HEIGHT)]
-defend_grid = [ [grid.B for i in range(grid.GRID_WIDTH)] for j in range(grid.GRID_HEIGHT)]
+grid_attack = [ [grid.B for i in range(grid.GRID_WIDTH)] for j in range(grid.GRID_HEIGHT)]
+grid_defend = [ [grid.B for i in range(grid.GRID_WIDTH)] for j in range(grid.GRID_HEIGHT)]
 
 def get_location(index):
 
-	global defend_grid
+	global grid_defend
 	
 	dir = random.randint(0,1)
 	# if horizontal
@@ -28,36 +28,36 @@ def get_location(index):
 		col = random.randint(0,grid.GRID_WIDTH - 1)
 		row = random.randint(0,grid.GRID_HEIGHT - 1 - grid.VESSEL_SIZE[index])
 	
-	if grid.has_overlap(defend_grid, index, row, col, dir):
+	if grid.has_overlap(grid_defend, index, row, col, dir):
 		get_location(index)
 	else:
-		defend_grid = grid.add_vessel(defend_grid, index, row, col, dir)
+		grid_defend = grid.add_vessel(grid_defend, index, row, col, dir)
 	
 
        
-def find_ships():
+def get_choice():
 	
 	found_ships = []
 	
-	for i in range(GRID_HEIGHT):
+	for i in range(grid.GRID_HEIGHT):
 		
-		for j in range(GRID_WIDTH):
+		for j in range(grid.GRID_WIDTH):
 			
-			if attack_grid[i][j] == 'X':
+			if grid_attack[i][j] == 'X':
 				found_ships.append([j,i])
 				
-	if len(found_ships) > 0			
-		roe, col = analyse_grid(found_ships)
+	if len(found_ships) > 0 :			
+		row, col = analyse_grid(found_ships)
 	else:
 		row, col = random_move()
-		
+	return row, col		
 	
 def random_move():
 	
 	col = random.randint(0,grid.GRID_WIDTH - 1)
 	row = random.randint(0,grid.GRID_HEIGHT - 1)
 	
-	while attack_grid[row][col] != '~':
+	while grid_attack[row][col] != '~':
 		
 		col = random.randint(0,grid.GRID_WIDTH - 1)
 		row = random.randint(0,grid.GRID_HEIGHT - 1)
@@ -65,29 +65,28 @@ def random_move():
 	return row, col
 	
 def analyse_grid(found_ships):
-	 for i in range(len(found_ships)):
-                
-				col = found_ships[i][0]
-                row = found_ships[i][1]
-				
-				if col > 0:
-					if attack_grid[row][col - 1] == grid.B
-						return row, (col - 1)
-				elif if row > 0:
-					if attack_grid[row - 1][col] == grid.B
-						return (row - 1), (col)
-				elif col < 9:
-					if attack_grid[row][col + 1] == grid.B
-						return row, (col + 1)
-				elif row < 9:
-					if attack_grid[row + 1][col] == grid.B
-						return (row + 1), (col)
+	for i in range(len(found_ships)):
+		col = found_ships[i][0]
+		row = found_ships[i][1]		
+		
+		if col > 0:
+			if grid_attack[row][col - 1] == grid.B:
+				return row, (col - 1)
+			elif  row > 0:
+				if grid_attack[row - 1][col] == grid.B:
+					return (row - 1), (col)
+			elif col < 9:
+				if grid_attack[row][col + 1] == grid.B:
+					return row, (col + 1)
+			elif row < 9:
+				if grid_attack[row + 1][col] == grid.B:
+					return (row + 1), (col)
 				
 	row, col = random_move()
 	return row, col
 					
 				# gonna use this later
-                """nearby_x =[]
+"""nearby_x =[]
                 col = found_ships[i][0]
                 row = found_ships[i][1]
                 
@@ -95,5 +94,6 @@ def analyse_grid(found_ships):
                         
                         if (col - j) > -1:
                                 
-                                if attack_grid[row][col - j] == grid.HIT:
-                                        nearby_x.append([grid.HIT, 'l'""
+                                if grid_attack[row][col - j] == grid.HIT:
+                                        nearby_x.append([grid.HIT, 'l'
+"""
