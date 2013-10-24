@@ -1,3 +1,8 @@
+###############################
+# Ahmed Elbannan, Nasir Osman
+# Tutorial 2 Group 5
+# Battleship
+###############################
 
 import grid
 import random
@@ -38,11 +43,11 @@ def find_ships():
 		
 		for j in range(GRID_WIDTH):
 			
-			if attack_grid[i][j] == grid.HIT:
+			if attack_grid[i][j] == 'X':
 				found_ships.append([j,i])
 				
 	if len(found_ships) > 0			
-		analyse_grid(found_ships)
+		roe, col = analyse_grid(found_ships)
 	else:
 		row, col = random_move()
 		
@@ -52,7 +57,7 @@ def random_move():
 	col = random.randint(0,grid.GRID_WIDTH - 1)
 	row = random.randint(0,grid.GRID_HEIGHT - 1)
 	
-	while attack_grid[row][col] != grid.B:
+	while attack_grid[row][col] != '~':
 		
 		col = random.randint(0,grid.GRID_WIDTH - 1)
 		row = random.randint(0,grid.GRID_HEIGHT - 1)
@@ -60,17 +65,35 @@ def random_move():
 	return row, col
 	
 def analyse_grid(found_ships):
-	
-	for i in range(len(found_ships)):
-		
-		nearby_x =[]
-		col = found_ships[i][0]
-		row = found_ships[i][1]
-		
-		for j in range(4):
-			
-			if (col - j) > -1:
+	 for i in range(len(found_ships)):
+                
+				col = found_ships[i][0]
+                row = found_ships[i][1]
 				
-				if attack_grid[row][col - j] == grid.HIT:
-					nearby_x.append([grid.HIT, 'l'
-		
+				if col > 0:
+					if attack_grid[row][col - 1] == grid.B
+						return row, (col - 1)
+				elif if row > 0:
+					if attack_grid[row - 1][col] == grid.B
+						return (row - 1), (col)
+				elif col < 9:
+					if attack_grid[row][col + 1] == grid.B
+						return row, (col + 1)
+				elif row < 9:
+					if attack_grid[row + 1][col] == grid.B
+						return (row + 1), (col)
+				
+	row, col = random_move()
+	return row, col
+					
+				# gonna use this later
+                """nearby_x =[]
+                col = found_ships[i][0]
+                row = found_ships[i][1]
+                
+                for j in range(4):
+                        
+                        if (col - j) > -1:
+                                
+                                if attack_grid[row][col - j] == grid.HIT:
+                                        nearby_x.append([grid.HIT, 'l'""
