@@ -72,6 +72,10 @@ def get_highest_prob(grid):
 
 def select_random(_list):
 	return random.randint(0,len(_list) - 1)	
+	
+def on_checkerboard(row, col):
+	if (col%2) == (row%2):
+		return True
 
 grid =        [
                 [0,0,0,0,0,0,0,0,0,0],
