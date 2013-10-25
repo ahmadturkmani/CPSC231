@@ -41,7 +41,9 @@ def get_probability(size, grid):
 					if_hit = 2
 				if(attack_grid[y+z][x] == 'O'):
 					if_miss = 0
-				grid[y + z][x] += 1 * if_miss * if_hit
+			
+			for z in range(size):
+			grid[y + z][x] += 1 * if_miss * if_hit
 
 	for i in range(GRID_HEIGHT):
 		print(grid[i])
