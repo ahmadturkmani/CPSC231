@@ -25,11 +25,11 @@ def show_title():#Printing initialziation - intro screen
 		
 		
 
-def get_winner():
+def get_winner(): #Checks if AI, or Human has won, prints trophy if human wins, otherwise prints you lose. 
 	black_alive = False
 	white_alive = False
-	for i in range(grid.GRID_HEIGHT * grid.GRID_WIDTH):
-		if grid.grid[i] == "BP" or grid.grid[i] ==  "BK":
+	for i in range(grid.GRID_HEIGHT * grid.GRID_WIDTH): #Running loop a total of 5x5 times; 25
+		if grid.grid[i] == "BP" or grid.grid[i] ==  "BK": 
 			black_alive = True
 		if grid.grid[i] == "WP" or grid.grid[i] == "WK":
 			white_alive = True
@@ -50,7 +50,6 @@ def main():
 	grid.print_board()
 
 	# game loop. Play till user decides to quit
-
 	while get_winner():
 		grid.check_knight()
 		human.get_choice()
