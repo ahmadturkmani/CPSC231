@@ -4,9 +4,9 @@ import grid
 # asks user to move or quit ###
 def get_choice():
 	print('[M]ove\n[Q]uit')
-	move = input('What is you choice:').lower()
+	move = input('What is you choice:').lower() #Makes sure input is lowercase. 
 	if  move == 'q':
-		sys.exit()
+		sys.exit() #Exits program if user asks too. 
 	elif move == 'm':
 		print()
 		get_move()
@@ -15,7 +15,7 @@ def get_choice():
 		get_choice()
 		
 		
-# asks user to select a piece to move ###
+# asks user to select a piece to move
 def get_move():
 	grid.print_board()
 
