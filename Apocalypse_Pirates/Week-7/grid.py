@@ -1,4 +1,6 @@
+#Grid Program
 
+#Global grid constants
 
 GRID_HEIGHT = 5
 GRID_WIDTH = 5
@@ -15,9 +17,8 @@ KNIGHT_MOVE = [[2,1],
 			  [1,-2], 
 			  [-1,2], 
 			  [-1,-2]] # all moves a knight can make
-
-
-#grid
+			  
+#Grid; Global variables 
 b = '[]'
 grid = [b for i in range(GRID_WIDTH * GRID_HEIGHT)]
 
@@ -57,7 +58,7 @@ def print_board():
 	print()
 	
 	
-def check_knight():
+def check_knight(): #Checks if Pawn can become a knight. 4 is the end of the grid, 0 is the other end. 
 	for i in range(GRID_WIDTH):
 		if grid[List2Dto1D(0, i)] == 'WP':
 			grid[List2Dto1D(0, i)] = 'WK'
