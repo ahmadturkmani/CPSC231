@@ -2,7 +2,7 @@ import grid
 import random
 import __main__
 
-
+KNIGHT_MOVE = [[2,1], [2,-1], [-2,1], [-2,-1], [1,2], [1,-2], [-1,2], [-1,-2]] # all moves a knight can make
 
 def get_move():
 	
@@ -40,8 +40,8 @@ def get_endmove(row, col, piece, board):
 	if piece == "BK":
 		coor = random.randint(0,7)
 		#Beginning the random initialization for a move. 
-		new_row = grid.KNIGHT_MOVE[coor][1] + row
-		new_col = grid.KNIGHT_MOVE[coor][0] + col
+		new_row = KNIGHT_MOVE[coor][1] + row
+		new_col = KNIGHT_MOVE[coor][0] + col
 		
 	#Only posibilities for a pawn move. 
 	elif piece == "BP":
@@ -50,8 +50,6 @@ def get_endmove(row, col, piece, board):
 	else:
 		get_move()
 	
-	#Debugging
-	print(row, col, new_row, new_col, piece)
 	
 	if 0 <= new_row < grid.GRID_HEIGHT and 0 <= new_col < grid.GRID_WIDTH:
 		
@@ -82,7 +80,7 @@ def validate_move(row, col, new_row, new_col, piece, board):
 
 		# We check if the knight is moving in an L-shape, and if the spot is either empty or has an enemy piece
 		for i in range(8):	
-			if (new_col == col + grid.KNIGHT_MOVE[i][0]) and (new_row == row + grid.KNIGHT_MOVE[i][1]) and ((board[grid.List2Dto1D(new_row, new_col)] == 'WK') or (board[grid.List2Dto1D(new_row, new_col)] == 'WP') or (board[grid.List2Dto1D(new_row, new_col)] == grid.b)):
+			if (new_col == col + KNIGHT_MOVE[i][0]) and (new_row == row + KNIGHT_MOVE[i][1]) and ((board[grid.List2Dto1D(new_row, new_col)] == 'WK') or (board[grid.List2Dto1D(new_row, new_col)] == 'WP') or (board[grid.List2Dto1D(new_row, new_col)] == grid.b)):
 				
 				# if enemy is killed, taunt them! Makes AI a little smarter
 				if (board[grid.List2Dto1D(new_row, new_col)] == 'WK' or board[grid.List2Dto1D(new_row, new_col)] == 'WP'): 
