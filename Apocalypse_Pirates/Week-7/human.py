@@ -2,6 +2,8 @@ import sys
 import grid
 import  __main__
 
+KNIGHT_MOVE = [[2,1], [2,-1], [-2,1], [-2,-1], [1,2], [1,-2], [-1,2], [-1,-2]] # all moves a knight can make
+
 # asks user to move or quit ###
 def get_choice():
 	print('[M]ove\n[Q]uit')
@@ -92,7 +94,7 @@ def validate_move(row, col, new_row, new_col, piece, board):
 
 		# We check if the knight is moving in an L-shape, and if the spot is either empty or has an enemy piece
 		for i in range(8):	
-			if (new_col == col + grid.KNIGHT_MOVE[i][0]) and (new_row == row + grid.KNIGHT_MOVE[i][1]) and ((board[grid.List2Dto1D(new_row, new_col)] == 'BK') or (board[grid.List2Dto1D(new_row, new_col)] == 'BP') or (board[grid.List2Dto1D(new_row, new_col)] == grid.b)):
+			if (new_col == col + KNIGHT_MOVE[i][0]) and (new_row == row + KNIGHT_MOVE[i][1]) and ((board[grid.List2Dto1D(new_row, new_col)] == 'BK') or (board[grid.List2Dto1D(new_row, new_col)] == 'BP') or (board[grid.List2Dto1D(new_row, new_col)] == grid.b)):
 				
 				# if enemy is killed, taunt them!
 				if (board[grid.List2Dto1D(new_row, new_col)] == 'BK' or board[grid.List2Dto1D(new_row, new_col)] == 'BP'): 
