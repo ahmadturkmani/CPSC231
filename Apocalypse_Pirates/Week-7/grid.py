@@ -8,14 +8,7 @@ PIECE_W_START = [15, 21, 22, 23, 19, 20, 24] # starting location for white piece
 PIECE_W = ['WP', 'WP', 'WP', 'WP', 'WP', 'WK', 'WK'] # white pieces
 PIECE_B_START = [5, 1, 2, 3 ,9, 0, 4] # starting location for white pieces
 PIECE_B = ['BP', 'BP', 'BP', 'BP', 'BP', 'BK', 'BK'] # black pieces
-KNIGHT_MOVE = [[2,1], 
-			  [2,-1], 
-			  [-2,1], 
-			  [-2,-1], 
-			  [1,2], 
-			  [1,-2], 
-			  [-1,2], 
-			  [-1,-2]] # all moves a knight can make
+
 			  
 #Grid; Global variables 
 b = '[]'
