@@ -1,4 +1,3 @@
-#Grid Program
 
 #Global grid constants
 
@@ -20,23 +19,24 @@ KNIGHT_MOVE = [[2,1],
 			  
 #Grid; Global variables 
 b = '[]'
-grid = [b for i in range(GRID_WIDTH * GRID_HEIGHT)]
+
 
 
 # puts all pieces on board
-def setup_board():
+def setup_board(board):
 	
 	# place pieces on board according to thier locations in the arrays
 	for i in range(7):
-		grid[PIECE_W_START[i]] = PIECE_W[i]
-		grid[PIECE_B_START[i]] = PIECE_B[i]
+		board[PIECE_W_START[i]] = PIECE_W[i]
+		board[PIECE_B_START[i]] = PIECE_B[i]
+	return board
 
 # changes a 2d index to a 1d index in a list
 def List2Dto1D(row, col):
 	return (col + (row * GRID_WIDTH))
 
 # prints out the grid		
-def print_board():
+def print_board(board):
 
 	# board header
 	print('__________________________');
@@ -49,7 +49,7 @@ def print_board():
 
 		# print entire row on one line
 		for col in range(GRID_WIDTH):
-			print(grid[List2Dto1D(row, col)] + ' ', end = '');
+			print(board[List2Dto1D(row, col)] + ' ', end = '');
 		print('|');
 
 	print();
@@ -58,12 +58,32 @@ def print_board():
 	print()
 	
 	
-def check_knight(): #Checks if Pawn can become a knight. 4 is the end of the grid, 0 is the other end. 
+def check_knight(board): #Checks if Pawn can become a knight. 4 is the end of the grid, 0 is the other end. 
 	for i in range(GRID_WIDTH):
-		if grid[List2Dto1D(0, i)] == 'WP':
-			grid[List2Dto1D(0, i)] = 'WK'
-		if grid[List2Dto1D(4, i)] == 'BP':
-			grid[List2Dto1D(4, i)] = 'BK'
+		if board[List2Dto1D(0, i)] == 'WP':
+			board[List2Dto1D(0, i)] = 'WK'
+		if board[List2Dto1D(4, i)] == 'BP':
+			board[List2Dto1D(4, i)] = 'BK'
+	return board
+			
+def get_winner(board): #Checks if AI, or Human has won, prints trophy if human wins, otherwise prints you lose. 
+	black_alive = False
+	white_alive = False
+	
+	for i in range(GRID_HEIGHT * GRID_WIDTH): #Running loop a total of 5x5 times; 25
+		if board[i] == "BP" or board[i] ==  "BK": 
+			black_alive = True
+		if board[i] == "WP" or board[i] == "WK":
+			white_alive = True
+			
+	if white_alive == True and black_alive == True:		
+		return True
+	elif white_alive == True and black_alive == False:
+		print(	'/---------------------------\\n|----------YOU WIN!----------|\n==============================\n| | | | | | | | | | | | | | ||\n******************************\n             | |                \n       ==============')
+		return False
+	elif black_alive == True and white_alive == False:
+		print("You Lose.")
+		return False
 	
 	
 	
