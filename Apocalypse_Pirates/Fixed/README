@@ -1,0 +1,23 @@
+This is where the files are going to go for the new Apocalypse verision. Until it works PROPERLY it will be under the BETA
+branch. After words we can push it to master. I will change the way the AI works.
+
+The way it will work is 5 modules.
+
+MAIN - Which holds the game loop and Titlescreen
+
+GRID - initializes the pieces, prints the board and checks if knight is valid, and lastly gets the winner.
+    - ALSO PENALTY POINTS!
+
+HUMAN - the same as before. Little funcationality with change with this module. Maybe different error checking
+
+AI - AI will get a RANDOM move, from a select few moves. No more random numbers, but rather a random index which refers to
+     a list of moves the AI can make. 
+
+MOVE - idc what the name of this one is. Rather this will take the move, from the player, and ai, the previous move, and
+       compare how the move will affect the board. It will take pieces away if necessary and will also check if moves are
+       valid. This will then push the final board state to the GRID module which will print the board. 
+       
+       
+
+It shouldn't be too tricky once get the MOVE module created. Just a bunch of changes to be made. I will work on the AI
+module and update it when its complete. 
