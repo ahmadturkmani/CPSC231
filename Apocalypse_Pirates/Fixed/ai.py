@@ -56,8 +56,11 @@ def get_endmove(row, col, piece, board):
 			new_row = row + 1
 			new_col = col - 1
 		elif board[row+1][col] == grid.b: 
-			new_row = row + 1
-			new_col = col 	
+			if new_row <= grid.GRID_HEIGHT:
+				new_row = row + 1
+				new_col = col 	
+			else:
+				get_move()
 		
 	else:
 		get_move()
