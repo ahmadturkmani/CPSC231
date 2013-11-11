@@ -1,4 +1,3 @@
-
 #Global grid constants
 
 GRID_HEIGHT = 5
@@ -77,9 +76,9 @@ def get_winner(board): #Checks if AI, or Human has won, prints trophy if human w
     
     for i in range(GRID_HEIGHT): #Running loop a total of 5x5 times; 25
         for e in range(GRID_WIDTH):
-            if board[i][e] == "BP" or board[i][e] ==  "BK": 
+            if board[i][e] == "BP": 
                 black_alive = True
-            if board[i][e] == "WP" or board[i][e] == "WK":
+            if board[i][e] == "WP":
                 white_alive = True
             
             
