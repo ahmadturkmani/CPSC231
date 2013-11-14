@@ -33,7 +33,7 @@ MOVE - idc what the name of this one is. Rather this will take the move, from th
        compare how the move will affect the board. It will take pieces away if necessary and will also check if moves are
        valid. This will then push the final board state to the GRID module which will print the board. 
        
-       
 
-It shouldn't be too tricky once get the MOVE module created. Just a bunch of changes to be made. I will work on the AI
-module and update it when its complete. 
+Flow Chart Links:
+
+MAIN - https://drive.google.com/file/d/0B3XrtyM4ZlO-YnYxc2NxV0R0TlE/edit?usp=sharing
