@@ -45,15 +45,13 @@ class Grid:
 	
         #If piece selected is a white knight
         if piece[1:2] == 'K':
-				#Change 'BK' check to 'K' | WE DONT WANT IT TO KILL ITS OWN PIECE
-                # We check if the knight is moving in an L-shape, and if the spot is either empty or has an enemy piece
-                for i in range(8):        
-                        if (new_col == col + KNIGHT_MOVE[i][0]) and (new_row == row + KNIGHT_MOVE[i][1]) and ((board[new_row][new_col] == 'BK') or (board[new_row][new_col] == 'BP') or (board[new_row][new_col] == grid.b)):
-                                
-                                # if enemy is killed, taunt them!
-                                if (board[new_row][new_col] == 'BK' or board[new_row][new_col] == 'BP'): 
-                                        print('~(o_o)~ Ooh, kill em! ~(o_o)~')
-                                return True
+			#Change 'BK' check to 'K' | WE DONT WANT IT TO KILL ITS OWN PIECE
+            # We check if the knight is moving in an L-shape, and if the spot is either empty or has an enemy piece
+            for i in range(8):        
+				if (new_col == col + KNIGHT_MOVE[i][0]) and (new_row == row + KNIGHT_MOVE[i][1]) and ((board[new_row][new_col] == 'BK') or (board[new_row][new_col] == 'BP') or (board[new_row][new_col] == grid.b)):
+						# if enemy is killed, taunt them!
+						if (board[new_row][new_col] == 'BK' or board[new_row][new_col] == 'BP'): 
+							return True
        
         elif piece[1:2] == 'P':
 			if piece[0] == 'W':
@@ -66,13 +64,11 @@ class Grid:
                     return True
 
             # If there is an enemy to the top right, kill it 
-            elif (new_col == col + 1) and (new_row == row + forward) and ((board[new_row][new_col] == 'BK') or (board[new_row][new_col] == 'BP')):
-                    print('~(o_o)~ Ooh, kill em! ~(o_o)~')
+			elif (new_col == col + 1) and (new_row == row+ forward) and (board[new_row][new_col][0] == 'B'):
                     return True
 
             # If there is an enemy to the top left, kill it 
-            elif (new_col == col - 1) and (new_row == row + forward) and ((board[new_row][new_col] == 'BK') or (board[new_row][new_col] == 'BP')):
-                    print('~(o_o)~ Ooh, kill em! ~(o_o)~')
+            elif (new_col == col - 1) and (new_row == row + forward) and ((board[new_row][new_col][0] == 'B'):
                     return True
                     
                     
