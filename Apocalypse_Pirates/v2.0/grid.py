@@ -18,7 +18,28 @@ class Grid:
 		self.GRID_HEIGHT = 5
 		self.GRID_WIDTH = 5
 
-	
+	def save_to_file(name, grid):
+	#Opens the file under ref var save
+	save = open(name, 'w')
+	for x in range(0,GRID_WIDTH):
+		for y in range(0,GRID_HEIGHT):
+			save.write(grid[x][y] + ',')
+		save.write('\n')
+	save.close()
+	return grid
+
+def load_file(name):
+	grid = [[B]*GRID_HEIGHT for i in range(GRID_WIDTH)]
+	load = open(name, 'r')
+	for x in range(0, GRID_WIDTH):
+		line = load.readline()
+		line = line.split(',')
+		for y in range(0, GRID_HEIGHT):
+			gridvar = line[y]
+			grid[x][y] = gridvar
+			
+	load.close()
+	return grid
 	
 	def set_board(self, p_loc):
 		for i in p_loc:
@@ -111,6 +132,7 @@ def print_grid(human_grid, ai_grid):
 			else:
 				print(b, end = "")
 		print()
+
 
 			
 			
