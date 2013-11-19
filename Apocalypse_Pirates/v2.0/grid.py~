@@ -60,6 +60,7 @@ class Grid:
 				col = int(loc[1])
 				self.board[row][col] = i
 			
+		print(self.board)
 	
 	def move_piece(self, row, col, piece, p_loc):
 		p_loc[piece] = [row, col]

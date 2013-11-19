@@ -101,18 +101,13 @@ class ApocalypseGUI:
 		
 	def setup_titlescreen(self):
 	
-			
 		self.main_frame = ttk.Frame(self.root)
 		self.main_frame.place(x = 0, y = 0, width = self.w, height = self.h)
-		
-		self.bac_canvas = Canvas(self.main_frame)
-		self.bac_canvas.place(x = 0, y = 0, width = self.w, height = self.h)	
 		
 		self.button = ttk.Button(self.main_frame, text = "Continue", command = self.titlescreen_clicked)
 		self.button.place(x= self.w/2 - 32, y = self.h - 48, width = 64, height = 32)
 		
-	
-	### sets up main game area ###
+	## sets up main game area ##
 	def titlescreen_clicked(self):
 	
 		self.button.destroy()
