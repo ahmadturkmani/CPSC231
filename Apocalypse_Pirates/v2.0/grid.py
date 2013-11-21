@@ -1,9 +1,10 @@
-#Comments
+#Comments go here 
 
-
+#Global Variables
 b = '[ ]'
 GRID_HEIGHT = 5
 GRID_WIDTH = 5
+KNIGHT_MOVE = [[2,1], [2,-1], [-2,1], [-2,-1], [1,2], [1,-2], [-1,2], [-1,-2]]
 
 #Grid Class
 
@@ -35,120 +36,147 @@ class Grid:
 
 			
 		
-
+	# Used for loading a grid from a file 
 	def load_file(_file):
 		
 		grid = []
 		
 		_file.readline() # reads the header
 		
+		#loops through each line of the file
 		for i in range(GRID_WIDTH):
 			line = _file.readline()[:-1]
 			grid.append(list(line))
 				
 		return grid
 		
-	
+	#initialize board 
 	def setup_board(self, piece_loc):
 		
 		for i in piece_loc:
 			
-			loc = piece_loc[i]
+			location = piece_loc[i]
 			
-			if loc != 'dead':
-				row = int(loc[0])
-				col = int(loc[1])
+			if location != 'dead':
+            #row and column are equal to loc's x and y co-ordinates (loc is a list with only two values)
+				row = int(location[0])
+				col = int(location[1])
 				self.board[row][col] = i
 			
-	
-	def move_piece(self, row, col, piece, p_loc):
-		p_loc[piece] = [row, col]
-		update_grid(p_loc) 
-		return p_loc
+   #Changes the selected piece's location and updates the grid as well as returning the new co-ordinates of all the pieces(piece_loc)
+	def move_piece(self, row, col, piece, piece_loc):
+		piece_loc[piece] = [row, col]
+		self.board = recreate_grid(piece_loc)
+		return piece_loc
 		
-	def update_grid(self, p_loc):			
-		self.board = [[b,b,b,b,b], \
-                [b,b,b,b,b], \
-                [b,b,b,b,b], \
-                [b,b,b,b,b], \
-                [b,b,b,b,b]]
-		for i in p_loc:
-			if p_loc[i] != 'dead':
-				self.board[p_loc[i][0]][p_loc[i][1]] = i
+
 	
 	def validate_location(self, row, col, new_row, new_col, piece, p_loc):
 	
-        #If piece selected is a white knight
+      #If piece selected is a knight
+		#If piece selected is a knight
 		if piece[1] == 'K':
 			#Change 'BK' check to 'K' | WE DONT WANT IT TO KILL ITS OWN PIECE
             # We check if the knight is moving in an L-shape, and if the spot is either empty or has an enemy piece
 			for i in range(8):        
-				if (new_col == col + KNIGHT_MOVE[i][0]) and (new_row == row + KNIGHT_MOVE[i][1]) and ((board[new_row][new_col] == 'BK') or (board[new_row][new_col] == 'BP') or (board[new_row][new_col] == grid.b)):
+				if (new_col == col + KNIGHT_MOVE[i][0]) and (new_row == row + KNIGHT_MOVE[i][1]) and (self.board[new_row][new_col] == b):
 						# if enemy is killed, taunt them!
-						if (board[new_row][new_col] == 'BK' or board[new_row][new_col] == 'BP'): 
 							return True
-       
+      #If the piece is a pawn
 		elif piece[1] == 'P':
+			#For white, forward is negative
 			if piece[0] == 'W':
 				forward = -1
+			#Vice-versa 
 			elif piece[0] == 'B':
 				forward = 1
 			
             # If there's nothing in front of the piece, move it up 
-			if (new_col == col) and (new_row == row + forward) and (board[new_row][new_col] == grid.b):
+			if (new_col == col) and (new_row == row + forward) and (self.board[new_row][new_col] == b):
 				return True
 
             # If there is an enemy to the top right, kill it 
-			elif (new_col == col + 1) and (new_row == row+ forward) and (board[new_row][new_col][0] == 'B'):
+			elif (new_col == col + 1) and (new_row == row+ forward) and (self.board[new_row][new_col][0] == 'B'):
 				return True
 
             # If there is an enemy to the top left, kill it 
-			elif (new_col == col - 1) and (new_row == row + forward) and (board[new_row][new_col][0] == 'B'):
+			elif (new_col == col - 1) and (new_row == row + forward) and (self.board[new_row][new_col][0] == 'B'):
 				return True
                     
                     
-                    
-def finalize_move(human_grid, ai_grid, last_human, last_ai):
-	for i in range(len(human_grid)):
-		for j in range(len(human_grid[i])):
-			if human_grid[i][j]== b or ai_grid[i][j] == b:
-				pass
-			else:
-				if human_grid[i][j] == last_human:
-					if ai_grid[i][j] == last_ai:
-						if last_human[1] < last_ai[1]:
-							ai_grid[i][j] == b
-							ai.pieces[last_ai] = 'dead'
-						elif last_human[1] > last_ai[1]:
-							human_grid[i][j] == b
-							human.pieces[last_human] = 'dead'
-						else:
-							human_grid[i][j] == b
-							human.pieces[last_human] = 'dead'
-							ai_grid[i][j] == b
-							ai.pieces[last_ai] = 'dead'
-					else:
-						ai_grid[i][j] == b
-						ai.pieces[last_ai] = 'dead'	
-				else:
-					human_grid[i][j] == b
-					human.pieces[last_human] = 'dead'
-	return human_grid, ai_grid
-
-def print_grid(human_grid, ai_grid):
+# Lets pieces kill each other                
+def finalize_move( dic_human, dic_ai, last_human, last_ai,):
+	#print('new')
+	test_h = dict(dic_human)
+	test_a = dict(dic_ai)
 	
-	for i in range(len(human_grid)):
-		for j in range(len(human_grid[i])):
-			if human_grid[i][j] != b:
-				print(human_grid[i][j], end = "")
-			elif ai_grid[i][j] != b:
-				print(ai_grid[i][j], end = "")
-			else:
-				print(b, end = "")
-		print()
-
-
+	for piece_h in test_h:
+		
+		for piece_a in test_a:
 			
+			if test_h[piece_h] == test_a[piece_a]:
+				#print('same', piece_h, piece_a)
+				if piece_h == last_human:
+					#print('h')
+					if piece_a == last_ai:
+						#print('a')
+						if piece_h[1] == piece_a[1]:
+							#print('type1')
+							dic_human[last_human] = 'dead'
+							dic_ai[last_ai] = 'dead'
+						elif piece_h[1] > piece_a[1]:
+							#print('typea')
+							dic_human[last_human] = 'dead'
+						else:
+							#print('typeh')
+							dic_ai[last_ai] = 'dead'
+					
+					else:
+						dic_ai[piece_a] = 'dead'
+				
+				else:
+					dic_human[piece_h] = 'dead'
+	
+	"""for i in dic_ai:
+		if dic_human[last_human] == dic_ai[i]:
+			print(dic_human[last_human],dic_ai[i], i, last_human)
+			if i == last_human:
+				dic_human[last_human] = 'dead'
+				dic_ai[i] = 'dead'
+				
+			else:
+				dic_ai[i] = 'dead'
+				
+	if last_ai != 'none':		
+		for i in dic_human:
+			if dic_ai[last_ai] == dic_human[i]:
+				if i == last_ai:
+					dic_human[i] = 'dead'
+					dic_ai[last_ai] = 'dead'
+					
+				else:
+					dic_human[i] = 'dead'"""
+				
+	return dic_human, dic_ai
+	
+
+### creates a grid from a dictionary ###								
+def recreate_grid(dic):
+		
+		temp_grid = [[b for i in range(GRID_WIDTH)] for j in range(GRID_HEIGHT)]
+		
+		for i in dic: # loop thru dictionary
+		
+			location = dic[i]
+		
+			if location != 'dead': # if not dead
+			
+				# place the piece on the board
+				row = int(location[0])
+				col = int(location[1])
+				temp_grid[row][col] = i
+		
+		return temp_grid			
 			
 			
 			
