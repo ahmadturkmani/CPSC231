@@ -177,7 +177,48 @@ def recreate_grid(dic):
 				temp_grid[row][col] = i
 		
 		return temp_grid			
-			
-			
-			
-				
+
+
+def get_winner(human_di, ai_di):
+	x = 0 
+	y = 0
+	for piece_human in human_di:
+		if piece_human == 'dead':
+			x =+ 1
+	for piece_ai in ai_di:
+		if piece_ai == 'dead':
+			y =+ 1
+	
+	if x == len(human_di) and y == len(ai_di):
+		return 'draw'
+	
+	elif x == len(human_di) and y < len(ai_di):
+		return 'ai'
+	
+	elif x < len(human_di) and y == len(ai_di):
+		return 'human'
+	else:
+		return 'none'
+
+def check_knight(dic):
+	for x in dic:
+		if x[1] == 'K':
+			counter += 1
+		
+		if x[0] == 'B':
+			end_row = 4
+		elif x[0] == 'W':
+			end_row = 0
+		
+		
+	if counter > 2:
+		for piece in dic:
+			if dic[piece][0] == end_row and piece[1] == 'P':
+				loc = dic[piece] 
+				del dic[piece]
+				num = int(piece[2]) + 2
+				piece[2] = str(num)
+				piece[1] = 'K' 
+				dic[piece] = loc
+	
+	return dic
