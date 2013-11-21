@@ -1,169 +1,205 @@
-import grid
 import random
+import grid
 
-KNIGHT_MOVE = [[2,1], [2,-1], [-2,1], [-2,-1], [1,2], [1,-2], [-1,2], [-1,-2]]
-b = '[ ]'
-
-difficulty = 1
-
+KNIGHT_MOVES = [[2,1], [2,-1], [-2,1], [-2,-1], [1,2], [1,-2], [-1,2], [-1,-2]]
 possible_moves = []
-
+difficulty = 4
 
 class node:
 	
 	def __init__(self):
-		self.children = list()
-		self.parent = 'none'
-		self.level = 0
-		self.dic_turn = {}
-		self.dic_other = {}
 	
+		self.children = list()	# list of children objects
+		self.parent = 'none'	# parent object
+		self.level = 0			# level on tree
+		self.state = 'none'		# which player
+		self.dic_human = {}		# human pieces
+		self.dic_ai = {}		# ai pieces
+	
+	### adds a child node, and returns it's value ###
 	def add_child(self):
+	
+		# create the child node
 		new_node = node()
+		
+		# setup the child, add variables, and add it to children
 		self.children.append(new_node)
 		new_node.parent = self
 		new_node.level = self.level + 1
+		
 		return new_node
 	
-	def get_ancestor(self):
-		cur = self
-		while cur.level !=2:
+	### gets the original move to reach this state ###
+	def get_ancestor(self, wanted_level):
+	
+		cur = self # start with me!
+		
+		# loop through ancestry until we find desired ancestor
+		while cur.level != wanted_level:
 			cur = cur.parent
 			
-		anc = cur
-		
-		return anc
+		return cur
 	
-	def get_valid_moves(self, dic_main, dic_oth ):
+	### grows the tree to desired degree, and adds them to possible_moves
+	def grow_tree(self):
+		
+		if self.state == 'original':
+		
+			child = self.add_child()
+			child.dic_human = dict(self.dic_human)
+			child.dic_ai = dict(self.dic_ai)
+			child.state = 'human'
+			child.grow_tree()
 			
-		print('new')
+		elif self.state == 'human':
+		
+			self.get_valid_moves(self.dic_human, self.dic_ai)
+			
 
-		for piece in dic_main:
+			best, worst = best_moves(self.children)
+			
+			for w in worst:
+				
+				if self.level < difficulty:
+				
+					self.children[w].grow_tree()
+				
+				else:
+				
+					possible_moves.append(self.children[w])
+			
+		elif self.state == 'ai':
 		
-			loc = dic_main[piece]
+			self.get_valid_moves(self.dic_ai, self.dic_human)
+			
+			
+			for c in self.children:
+				
+				if self.level < difficulty:
+				
+					c.grow_tree()
+				
+				else:
+				
+					possible_moves.append(c)
+			
+				
+			
+			
+			
+			
+	### returns all valid moves as nodes		
+	def get_valid_moves(self, dic, dic_opp):
 		
-			if loc != 'dead':
+		for piece in dic:  # go thru dictionary, piece by piece
 		
-		#If piece selected is a knight
-				if piece[1] == 'K':
-					# We check if the knight is moving in an L-shape, and if the spot is either empty or has an enemy piece
-					for i in range(8):
-							
+			loc = dic[piece] # get the location of each piece(list)
+		
+			if loc != 'dead': # if piece isn't dead...
+				
+				if piece[1] == 'K': # if piece is a knight
+				
+					for km in KNIGHT_MOVES:
+					
 						can_move = True
 					
-						new_row = loc[0] + KNIGHT_MOVE[i][0]
-						new_col = loc[1] + KNIGHT_MOVE[i][1] 
+						new_row = loc[0] + km[0]
+						new_col = loc[1] + km[1] 
 							
 						#print(piece, new_row, new_col, loc[0], loc[1])
 							
-						if 0 <= new_col < 5 and 0 <= new_row < 5:
+						if 0 <= new_col < grid.GRID_WIDTH and 0 <= new_row < grid.GRID_HEIGHT: # if move is on board
 						
-							for j in dic_main:
-								if dic_main[j] == [new_row, new_col]:
+							# if move is not overlapping another piece
+							for j in dic:
+								if dic[j] == [new_row, new_col]:
 									can_move = False
 								
-							if can_move:
-								print(True)
+							if can_move:								
 								
 								child = self.add_child()
-				
-								child.dic_turn = dict(dic_main)
-								child.dic_turn[piece] = [new_row, new_col]
-								print(child.dic_turn)
-								child.dic_other = dict(dic_oth)
+								child.dic_human = dict(self.dic_human)
+								child.dic_ai = dict(self.dic_ai)
 								child.last_piece = piece
 								
-								if self.level % 2 == 1:
-									a,b, self.dic_main, child.dic_turn = grid.finalize_move(self.recreate_grid(self.dic_turn), self.recreate_grid(child.dic_turn), self.last_piece, child.last_piece, self.dic_turn, child.dic_turn)	
-									
-									
-								if difficulty > self.level:
-									child.get_valid_moves(child.dic_other, child.dic_turn)
-								else:
-									possible_moves.append(child)
-									print('added!', len(possible_moves))
 								
-					
-	def analyze_board(self, dic_1, dic_2):
+								if self.state == 'human':
+									child.dic_human[piece] = [new_row, new_col]
+									child.state = 'ai'
+								else:
+									child.dic_ai[piece] = [new_row, new_col]
+									child.state = 'human'
+									
+									
+### gives a board it's score ###	
+def analyze_board(dic):
 		total = 0
-		
-		for i in dic_1:
-			if dic_1[i] != 'dead':
-				if i[1] == 'P':
-					total += 1
-				elif i[1] == 'K':
-					total += 2
-					
-		for i in dic_2:
-			if dic_2[i] != 'dead':
-				if i[1] == 'P':
-					total -= 1
-				elif i[1] == 'K':
-					total -= 2
-		
-		return total
-		
-					
-		
-	def recreate_grid(self, dic):
-		
-		temp_grid = [[grid.b for i in range(grid.GRID_WIDTH)] for j in range(grid.GRID_HEIGHT)]
 		
 		for i in dic:
 		
-			location = dic[i]
-		
-			if location != 'dead':
-				#row and column are equal to loc's x and y co-ordinates (loc is a list with only two values)
-				row = int(location[0])
-				col = int(location[1])
-				temp_grid[row][col] = i
-		
-		return temp_grid
-
-		
-		
-def best_moves(node_list):
-		high_score = -999
-		hi_list = []
-		for e in node_list:
-			cur_score = e.analyze_board(e.dic_other, e.dic_turn)
-			if cur_score > high_score:
-				high_score = cur_score
-		print (high_score)
+			if dic[i] != 'dead':
 			
-		e = 0	
-		for e in range(len(node_list)):
-			cur_score = node_list[e].analyze_board(node_list[e].dic_other, node_list[e].dic_turn)
-			if cur_score == high_score:
-				hi_list.append(e)
-				
-		return hi_list
-
-
-
-
+				if i[1] == 'P':
+					total += 1
+					
+				elif i[1] == 'K':
+					total += 2
 		
-def get_move():
-	
-	global possible_moves
+		return total
 
-	top = node()
-	top.board_ai = top.recreate_grid(dic_ai)
-	top.board_human = top.recreate_grid(dic_human)
+### checks a list of nodes for highest/lowest score ###		
+def best_moves(node_list):
 
-	top.get_valid_moves( dic_ai, dic_human)
-	
-	best = best_moves(possible_moves)
-	print(best)
-	num = random.randint(0, len(best) - 1)
-	
-	choose = best[num]
-	
-	chosen_node = possible_moves[choose].get_ancestor()
-	
-	board.board = chosen_node.recreate_grid(chosen_node.dic_other)
-	
-	possible_moves = []
-	
-	return chosen_node.dic_other, chosen_node.last_piece
+		hi_score = -999
+		low_score = 999
+		
+		hi_list = []
+		low_list = []
+		
+		for e in node_list: # loop through all nodes
+
+			cur_score = (analyze_board(e.dic_ai) - analyze_board(e.dic_human)) # ai score - human score
+			
+			if cur_score > hi_score: # if hiscore beats previous, add it
+			
+				hi_score = cur_score
+			
+			if cur_score < low_score: # if lowscore beats previous, add it
+				
+				low_score = cur_score
+			
+		e = 0 # reset e
+		
+		for e in range(len(node_list)): # loop thru list again, this time adding best and worst
+		
+			cur_score = (analyze_board(node_list[e].dic_ai) - analyze_board(node_list[e].dic_human)) # ai score - human score
+			
+			if cur_score == hi_score: # if cur score equals high score, add it!
+			
+				hi_list.append(e)
+			
+			if cur_score == low_score: # if cur score equals low score, add it!
+			
+				low_list.append(e)
+				
+		return hi_list, low_list
+									
+
+				
+top = node()
+top.state = 'original'
+top.dic_ai = { 'BP1':[1,0],'BP2':[0,1], 'BP3':[0,2], 'BP4':[0,3], 'BP5':[1,4], 'BK1':[0,0], 'BK2':[0,4] }
+top.dic_human = { 'WP1':[3,0],'WP2':[4,1], 'WP3':[4,2], 'WP4':[4,3], 'WP5':[3,4], 'WK1':[4,0], 'WK2':[4,4] }
+top.grow_tree()
+
+for e in possible_moves:
+	print(e.last_piece, e.level)
+	print(e.parent.dic_human)
+	print(e.parent.dic_ai)
+	print(e.dic_human)
+	print(e.dic_ai)
+	for u in grid.recreate_grid(e.dic_human):
+		print(u)
+	for u in grid.recreate_grid(e.dic_ai):
+		print(u)
+	input('...')
