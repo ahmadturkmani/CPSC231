@@ -71,7 +71,7 @@ class Grid:
 		
 
 	
-	def validate_location(self, row, col, new_row, new_col, piece, p_loc):
+	def validate_location(self, row, col, new_row, new_col, piece, oth_board):
 	
       #If piece selected is a knight
 		#If piece selected is a knight
@@ -92,16 +92,17 @@ class Grid:
 				forward = 1
 			
             # If there's nothing in front of the piece, move it up 
-			if (new_col == col) and (new_row == row + forward) and (self.board[new_row][new_col] == b):
+			if (new_col == col) and (new_row == row + forward) and (self.board[new_row][new_col] == b) and (oth_board[new_row][new_col] == b):
 				return True
 
             # If there is an enemy to the top right, kill it 
-			elif (new_col == col + 1) and (new_row == row+ forward) and (self.board[new_row][new_col][0] == 'B'):
+			elif (new_col == col + 1) and (new_row == row+ forward) and (self.board[new_row][new_col]== b) and (oth_board[new_row][new_col] != b):
 				return True
 
             # If there is an enemy to the top left, kill it 
-			elif (new_col == col - 1) and (new_row == row + forward) and (self.board[new_row][new_col][0] == 'B'):
+			elif (new_col == col - 1) and (new_row == row + forward) and (self.board[new_row][new_col] == b) and (oth_board[new_row][new_col] != b):
 				return True
+		return False
                     
                     
 # Lets pieces kill each other                
@@ -176,49 +177,68 @@ def recreate_grid(dic):
 				col = int(location[1])
 				temp_grid[row][col] = i
 		
-		return temp_grid			
-
-
-def get_winner(human_di, ai_di):
+		return temp_grid	
+		
+def get_winner(dic_human, dic_ai):
+	
 	x = 0 
 	y = 0
-	for piece_human in human_di:
-		if piece_human == 'dead':
+
+	
+	for piece in dic_human:
+		if piece[1] == 'P' and dic_human[piece] != 'dead':
 			x =+ 1
-	for piece_ai in ai_di:
-		if piece_ai == 'dead':
+	for piece in dic_ai:
+		if piece[1] == 'P' and dic_ai[piece] != 'dead':
 			y =+ 1
 	
-	if x == len(human_di) and y == len(ai_di):
+	if x == 0 and y == 0:
 		return 'draw'
 	
-	elif x == len(human_di) and y < len(ai_di):
+	elif x == 0 and y > 0:
 		return 'ai'
 	
-	elif x < len(human_di) and y == len(ai_di):
+	elif x > 0 and y == 0:
 		return 'human'
 	else:
-		return 'none'
+		return 'none'		
+			
+			
 
 def check_knight(dic):
-	for x in dic:
-		if x[1] == 'K':
-			counter += 1
-		
-		if x[0] == 'B':
-			end_row = 4
-		elif x[0] == 'W':
-			end_row = 0
-		
-		
-	if counter > 2:
+			
+		counter = 0
+		mp = 'none'
+			
 		for piece in dic:
-			if dic[piece][0] == end_row and piece[1] == 'P':
-				loc = dic[piece] 
-				del dic[piece]
-				num = int(piece[2]) + 2
-				piece[2] = str(num)
-				piece[1] = 'K' 
-				dic[piece] = loc
-	
-	return dic
+			if piece[1] == 'K' and dic[piece] != 'dead':
+				counter += 1
+                
+			if piece[0] == 'B':
+				end_row = 4
+			elif piece[0] == 'W':
+				end_row = 0
+      
+      
+		for piece in dic: 
+      
+			loc = dic[piece]
+      	              
+			if loc[0] == end_row and piece[1] == 'P':
+      	         
+				if counter < 2:
+			
+					del dic[piece]
+					num = int(piece[2]) + 2
+					new_piece = str(piece)
+					new_piece = new_piece[0] + 'K' + str(num)
+					dic[new_piece] = loc
+					
+				else:
+					
+					mp = piece
+        
+		return dic, mp
+			
+			
+				
