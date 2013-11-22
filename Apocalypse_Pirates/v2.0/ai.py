@@ -3,6 +3,7 @@ import grid
 
 KNIGHT_MOVES = [[2,1], [2,-1], [-2,1], [-2,-1], [1,2], [1,-2], [-1,2], [-1,-2]]
 possible_moves = []
+override = []
 difficulty = 4
 
 class node:
@@ -35,7 +36,7 @@ class node:
 		cur = self # start with me!
 		
 		# loop through ancestry until we find desired ancestor
-		while cur.level != wanted_level:
+		while cur.level > wanted_level or cur.level %2 == 0:
 			cur = cur.parent
 			
 		return cur
@@ -56,14 +57,23 @@ class node:
 		
 			self.get_valid_moves(self.dic_human, self.dic_ai)
 			
-			for c in self.children:
-				c.grow_tree()
+			if self.children != []:
+				
+				for c in self.children:
+					
+					c.grow_tree()
+					
+			else:
+					
+				possible_moves.append(self)
 				
 		elif self.state == 'ai':
 		
 			self.get_valid_moves(self.dic_ai, self.dic_human)
 			#print(self.children)
 			for c in self.children:
+				c.dic_human, mb = grid.check_knight(c.dic_human)
+				c.dic_ai, mb = grid.check_knight(c.dic_ai)
 				c.dic_human, c.dic_ai = grid.finalize_move(c.dic_human, c.dic_ai, self.last_piece, c.last_piece)
 				
 			best = best_moves(self.children)
@@ -72,15 +82,35 @@ class node:
 				
 				c = self.children[b]
 				
-				if self.level < difficulty:
+				won = grid.get_winner(c.dic_human, c.dic_ai)
 				
-					c.grow_tree()
-					#print('next_level')
+				if won == 'none':# no winner in sight...
+					
+					if self.level < difficulty:
 				
+						c.grow_tree()
+						#print('next_level')
+				
+					else:
+				
+						possible_moves.append(c)
+						#print('added!', len(possible_moves))
+						
+				elif won == 'ai':
+					
+					override.append(c)  # GET THIS MOVE!!
+					
+				elif won == 'human':
+					
+					return False # quit this whole branch
+					
 				else:
+					
+					possible_moves.append(c) # maybe it's the best move...
+					
+			if self.children == []:
 				
-					possible_moves.append(c)
-					#print('added!', len(possible_moves))
+				possible_moves.append(self)
 				
 			
 			
@@ -94,6 +124,10 @@ class node:
 			loc = dic[piece] # get the location of each piece(list)
 		
 			if loc != 'dead': # if piece isn't dead...
+			
+				board = grid.recreate_grid(dic)
+				opp_board = grid.recreate_grid(dic_opp)
+
 				
 				if piece[1] == 'K': # if piece is a knight
 				
@@ -109,9 +143,8 @@ class node:
 						if 0 <= new_col < grid.GRID_WIDTH and 0 <= new_row < grid.GRID_HEIGHT: # if move is on board
 						
 							# if move is not overlapping another piece
-							for j in dic:
-								if dic[j] == [new_row, new_col]:
-									can_move = False
+							if board[new_row][new_col] != grid.b:
+								can_move = False
 								
 							if can_move:								
 								
@@ -132,7 +165,7 @@ class node:
 			
 				elif piece[1] == 'P':
 					
-					can_move = True
+					can_move = False
 					
 					if piece[0] == 'W':
 						forward = -1
@@ -145,9 +178,8 @@ class node:
 					if 0 <= new_col < grid.GRID_WIDTH and 0 <= new_row < grid.GRID_HEIGHT: # if move is on board
 						
 							# if move is not overlapping another piece
-							for j in dic:
-								if dic[j] == [new_row, new_col]:
-									can_move = False
+							if board[new_row][new_col] == grid.b and opp_board[new_row][new_col] == grid.b:
+								can_move = True
 								
 							if can_move:								
 								
@@ -164,21 +196,95 @@ class node:
 
 								elif self.state == 'ai':
 									child.dic_ai[piece] = [new_row, new_col]
-									child.state = 'human'				
+									child.state = 'human'
+					
+					can_move = False
+					
+					# attack ->^				
+					new_row = loc[0] + forward
+					new_col = loc[1] + 1
+					
+					if 0 <= new_col < grid.GRID_WIDTH and 0 <= new_row < grid.GRID_HEIGHT: # if move is on board
+						
+							# if move is not overlapping another piece
+							if board[new_row][new_col] == grid.b and opp_board[new_row][new_col] != grid.b:
+								can_move = True
+								
+							if can_move:								
+								
+								child = self.add_child()
+								child.dic_human = dict(self.dic_human)
+								child.dic_ai = dict(self.dic_ai)
+								child.last_piece = piece
+								child.new_row = new_row
+								child.new_col = new_col
+								
+								if self.state == 'human':
+									child.dic_human[piece] = [new_row, new_col]
+									child.state = 'ai'
+
+								elif self.state == 'ai':
+									child.dic_ai[piece] = [new_row, new_col]
+									child.state = 'human'	
+									
+					can_move = False
+					
+					#for k in board:
+						#print(k)
+					
+					# attack ^<-				
+					new_row = loc[0] + forward
+					new_col = loc[1] - 1
+					
+					if 0 <= new_col < grid.GRID_WIDTH and 0 <= new_row < grid.GRID_HEIGHT: # if move is on board
+						
+							# if move is not overlapping another piece
+							if board[new_row][new_col] == grid.b and opp_board[new_row][new_col] != grid.b:
+								can_move = True
+								
+							if can_move:								
+								#print('yaya')
+								child = self.add_child()
+								child.dic_human = dict(self.dic_human)
+								child.dic_ai = dict(self.dic_ai)
+								child.last_piece = piece
+								child.new_row = new_row
+								child.new_col = new_col
+								
+								if self.state == 'human':
+									child.dic_human[piece] = [new_row, new_col]
+									child.state = 'ai'
+
+								elif self.state == 'ai':
+									child.dic_ai[piece] = [new_row, new_col]
+									child.state = 'human'								
 									
 ### gives a board it's score ###	
 def analyze_board(dic):
 		total = 0
+		pawn_weight = 1
+		
+		"""for piece in dic:
+			
+			if piece[1] == 'P' and dic[piece] != 'dead':
+				
+				pawn_weight +=1
+				
+		pawn_weight = (pawn_weight * difficulty)/2
+		
+		print(pawn_weight)"""
+			
 		
 		for i in dic:
 		
 			if dic[i] != 'dead':
 			
 				if i[1] == 'P':
-					total += 1
+					total += pawn_weight
 					
 				elif i[1] == 'K':
-					total += 2
+					total += 1
+					
 		
 		return total
 
@@ -224,7 +330,9 @@ def best_moves(node_list):
 def get_move(dic_human):
 	
 	global possible_moves
-
+	global override
+	
+	
 	top = node()
 	top.state = 'original'
 	top.dic_ai = dic_ai
@@ -232,21 +340,40 @@ def get_move(dic_human):
 
 	top.grow_tree()
 	#print(possible_moves)
-	best = best_moves(possible_moves)
+	
+	if override != []:
+		
+		chosen_node = override[0].get_ancestor(3)
+		
+	elif possible_moves != []:
 
-	num = random.randint(0, len(best) - 1)
+		best = best_moves(possible_moves)
+
+		num = random.randint(0, len(best) - 1)
 	
-	choose = best[num]
+		choose = best[num]
+
+		chosen_node = possible_moves[choose].get_ancestor(3)
+		
+	else:
+		
+		return False, False
+		
 	
-	chosen_node = possible_moves[choose].get_ancestor(3)
+	try:
+		dic_ai[chosen_node.last_piece] = [chosen_node.new_row, chosen_node.new_col]
+	except ValueError:
+		return False, False
+	except AttributeError:
+		return False, False
 	
-	dic_ai[chosen_node.last_piece] = [chosen_node.new_row, chosen_node.new_col]
 	
 	#print(dic_ai[chosen_node.last_piece])
 	
 	board.board = grid.recreate_grid(chosen_node.dic_ai)
-	
+	print(override)
 	possible_moves = []
+	override = []
 	
 	return dic_ai, chosen_node.last_piece
 
