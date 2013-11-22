@@ -1,4 +1,8 @@
+#This game is a working Apocalypse game. Designed by The Apocalypse Pirates at The University of Calgary. 
+#T2G5 Team Project - Demo 2 Final Rev. 
+#GUI Module - This module contains all the visual elements are replaces the human module.
 
+#Imports
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
@@ -7,7 +11,7 @@ import grid
 import ai
 import __main__
 import random
-
+import sys
 
 big_font = ('Trebuchet MS', 16)
 little_font = ('Trebuchet MS', 10)
@@ -40,6 +44,7 @@ class ApocalypseGUI:
 		# Create the main window
 		self.root = Tk()
 		self.root.title('Apocalypse')
+		
 		
 		# Make the screen size stay the same
 		self.root.minsize(w,h)
@@ -153,7 +158,7 @@ class ApocalypseGUI:
 			
 		self.main_frame = ttk.Frame(self.root)
 		self.main_frame.place(x = 0, y = 0, width = self.w, height = self.h)
-		
+
 		# add background picture
 		self.bac_canvas = Canvas(self.main_frame)
 		self.bac_canvas.place(x = 0, y = 0, width = self.w, height = self.h)
@@ -187,9 +192,7 @@ class ApocalypseGUI:
 			self.grid.append(row)
 		
 		self.update_grid()
-		
 		## Sets up the console ##
-		
 		self.console_text = ['' for i in range(self.CON_LINES)]
 		self.console_lines = []
 		self.console_icons = []
@@ -306,8 +309,9 @@ class ApocalypseGUI:
 
 			self.console_canvas.itemconfig(self.console_lines[i+1], text = self.console_text[i+1])
 	
-
-	
+		
+		
+		
 class Popup_knight:
 	def __init__(self, root, piece, dic, gui):
 		

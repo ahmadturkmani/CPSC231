@@ -1,10 +1,10 @@
-#V2.0 of this program will eventually contain a working version of Apocalypse playable
-#to the spec. documented in the CPSC231 website. 
-#This will contain the main game loop.
-#T2G5 Apocalypse Project - main.py:
+#This game is a working Apocalypse game. Designed by The Apocalypse Pirates at The University of Calgary. 
+#All work is licensed under the MIT license, unless otherwise noted.
+#Images used in the GUI are derived works from public domain work, unless otherwise noted. 
+#T2G5 Team Project - Demo 2 Final Rev. 
 
 #Imports
 import gui
-import grid
 
+#Start Game Loop. 
 GUI = gui.ApocalypseGUI(960, 720)
