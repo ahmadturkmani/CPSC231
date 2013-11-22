@@ -336,15 +336,20 @@ class Popup_knight:
 		col = int(self.col_entry.get()) - 1
 		board = grid.recreate_grid(self.dic)
 		o_board = grid.recreate_grid(ai.dic_ai)
-		if board[row][col] == grid.b and  o_board[row][col] == grid.b:
-			self.dic[self.piece] = [row, col]
-			self.gui.human_board.board = grid.recreate_grid(self.dic)
-			#method = getattr(ApocalypseGUI, 'update_board')
-			#method(self.dic)
-			self.gui.dic_human = self.dic
-			self.gui.update_grid()
-			self.top.destroy()
-		else:
-			messagebox.showinfo('!', 'Invalid coordinates')
-				
 		
+		if row < grid.GRID_HEIGHT and col < grid.GRID_WIDTH:
+		
+			if board[row][col] == grid.b and  o_board[row][col] == grid.b:
+				self.dic[self.piece] = [row, col]
+				self.gui.human_board.board = grid.recreate_grid(self.dic)
+				#method = getattr(ApocalypseGUI, 'update_board')
+				#method(self.dic)
+				self.gui.dic_human = self.dic
+				self.gui.update_grid()
+				self.top.destroy()
+			else:
+				messagebox.showinfo('!', 'Invalid coordinates')
+		else:
+			messagebox.showinfo('!', 'Coordinates too big. Try Again')
+		
+			
