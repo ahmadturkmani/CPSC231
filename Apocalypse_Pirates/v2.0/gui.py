@@ -1,20 +1,24 @@
 
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 import functools
 import grid
 import ai
-
+import __main__
+import random
 
 
 big_font = ('Trebuchet MS', 16)
 little_font = ('Trebuchet MS', 10)
+penalty = 0
 
 ###### APOCALYPSE GUI ######
 class ApocalypseGUI:
 	
 	### Initialization ###
-	def __init__(self, w, h):
+	def __init__(self, w, h):		
+		
 		
 		self.BASIC_UNIT = 64
 		self.CON_LINES = 12
@@ -26,13 +30,7 @@ class ApocalypseGUI:
 		ai.board = grid.Grid()
 		
 		# Human pieces and it's co-ordinates
-		self.dic_ai = { 'BP1':[1,0],'BP2':[0,1], 'BP3':[0,2], 'BP4':[0,3], 'BP5':[1,4], 'BK1':[0,0], 'BK2':[0,4] }
-		self.dic_human = { 'WP1':[3,0],'WP2':[4,1], 'WP3':[4,2], 'WP4':[4,3], 'WP5':[3,4], 'WK1':[4,0], 'WK2':[4,4] }
 		
-		ai.board.setup_board(self.dic_ai)
-		self.human_board.setup_board(self.dic_human)
- 
-		ai.dic_ai = dict(self.dic_ai)
 		
 		
 		self.cur_piece = ''
@@ -41,6 +39,7 @@ class ApocalypseGUI:
 		
 		# Create the main window
 		self.root = Tk()
+		self.root.title('Apocalypse')
 		
 		# Make the screen size stay the same
 		self.root.minsize(w,h)
@@ -49,6 +48,24 @@ class ApocalypseGUI:
 		# Save width and height
 		self.w = w
 		self.h = h
+		
+		if random.randint(0,1) == 1:
+			
+			self.dic_ai = { 'BP1':[1,0],'BP2':[0,1], 'BP3':[0,2], 'BP4':[0,3], 'BP5':[1,4], 'BK1':[0,0], 'BK2':[0,4]}
+			self.dic_human = { 'WP1':[3,0],'WP2':[4,1], 'WP3':[4,2], 'WP4':[4,3], 'WP5':[3,4], 'WK1':[4,0], 'WK2':[4,4] }
+			messagebox.showinfo('', 'You are white')
+		
+		else:
+			
+			self.dic_human = { 'BP1':[1,0],'BP2':[0,1], 'BP3':[0,2], 'BP4':[0,3], 'BP5':[1,4], 'BK1':[0,0], 'BK2':[0,4]}
+			self.dic_ai = { 'WP1':[3,0],'WP2':[4,1], 'WP3':[4,2], 'WP4':[4,3], 'WP5':[3,4], 'WK1':[4,0], 'WK2':[4,4] }
+			messagebox.showinfo('', 'You are black')
+		
+		ai.board.setup_board(self.dic_ai)
+		self.human_board.setup_board(self.dic_human)
+ 
+		ai.dic_ai = dict(self.dic_ai)		
+		
 		
 		# Load sprites
 		self.load_resources()
@@ -204,30 +221,70 @@ class ApocalypseGUI:
 		
 		#Updates piece when clicked on
 	def grid_button_clicked(self, x, y):
+		
 		if self.cur_piece == '':
+			print(ai.board.board)
+			print(self.human_board.board)
 			for e in self.dic_human:
+				
 				if self.human_board.board[x][y] == e:
+					
 					self.cur_piece = self.human_board.board[x][y]
 					self.last_x = x
 					self.last_y = y
+					
+					self.output_text('You selected ' + self.cur_piece + ' at (' + str(x) +  ',' +str(y) + ')')	
+					
 		elif self.cur_piece == self.human_board.board[x][y]:
+				
+			self.output_text('You deselected ' + self.cur_piece)			
+			
 			self.cur_piece = ''
 		else:
-			if self.human_board.validate_location(self.last_x, self.last_y, x, y, self.cur_piece, self.dic_human):
+			
+			if self.human_board.validate_location(self.last_x, self.last_y, x, y, self.cur_piece, ai.board.board):
 				dic_ai, piece_ai = ai.get_move(self.dic_human)
+				print(dic_ai, piece_ai)
+				if dic_ai == False:
+					messagebox.showinfo('', 'Stalemate!')
+					return False # will quit soon
+				self.output_text('You moved ' + self.cur_piece + ' to (' + str(x) +  ',' +str(y) + ')')	
 				self.dic_human = self.human_board.move_piece(x,y,self.cur_piece, self.dic_human)
 				self.dic_human, dic_ai = grid.finalize_move( self.dic_human, dic_ai, self.cur_piece, piece_ai)
 				#print(self.dic_human, dic_ai)
+				dic_ai, mb = grid.check_knight(dic_ai)
+				self.dic_human, mb = grid.check_knight(self.dic_human)
+				if mb != 'none':
+					a = Popup_knight(self.root, mb, self.dic_human, self)
 				ai.dic_ai = dic_ai
 				self.human_board.board = grid.recreate_grid(self.dic_human)
 				ai.board.board = grid.recreate_grid(ai.dic_ai)
+							
+				
+				won = grid.get_winner(self.dic_human, ai.dic_ai)				
+				print(won)
+				if won == 'ai':
+					messagebox.showinfo('', 'You lose! :(')
+				elif won == 'human':
+					messagebox.showinfo(' ', 'You Win! :)')
+				elif won == 'draw':
+					messagebox.showinfo('', 'Stalemate!')
 				
 				#print(grid.recreate_grid(self.dic_human))
 				#print(grid.recreate_grid(ai.dic_ai))
 				
-				self.cur_piece = ''		
+				self.cur_piece = ''
+			else:
+				global penalty
+				self.output_text('You earned a penalty point')	
+				penalty += 1
+				if penalty == 2:
+					messagebox.showinfo(' ', 'You Lose! :(')	
 		self.update_grid()
-		print(self.cur_piece)
+		#print(self.cur_piece)
+	def update_board(self, dic):
+		self.dic_human = dic
+		self.human_board.board = grid.recreate_grid(self.dic_human)	
 			
 	def output_text(self,string):
 		empty = 0
@@ -246,8 +303,48 @@ class ApocalypseGUI:
 				self.console_canvas.itemconfig(self.console_lines[i], text = self.console_text[i])
                         
 			self.console_text[i+1]= string
+
 			self.console_canvas.itemconfig(self.console_lines[i+1], text = self.console_text[i+1])
+	
 
 	
+class Popup_knight:
+	def __init__(self, root, piece, dic, gui):
+		
+		self.piece = piece
+		self.dic = dic
+		self.gui = gui
+		self.top = Toplevel(root,)
+		self.top.title('Too much knights!')
+		self.top.grab_set()
+		top_label= ttk.Label(self.top, text='You have 2 knights! Where would you like to move your pawn?', anchor = CENTER)
+		top_label.grid(column = 0, row = 0, columnspan = 3)
+		row_label= ttk.Label(self.top, text='Row  (1-5)')
+		row_label.grid(row = 1, column = 0)
+		col_label= ttk.Label(self.top, text='Column  (1-5)')
+		col_label.grid(row = 1, column = 2)
+		self.row_entry = ttk.Entry(self.top, width = 16)
+		self.row_entry.grid(row = 2, column = 0)
+		self.col_entry = ttk.Entry(self.top, width = 16)
+		self.col_entry.grid(row = 2, column = 2)
+		go_button = ttk.Button(self.top, text = 'Go!', command = self.button_click)
+		go_button.grid(row = 3, column = 0, columnspan = 3)
+		
+		
+	def button_click(self):
+		row = int(self.row_entry.get()) - 1
+		col = int(self.col_entry.get()) - 1
+		board = grid.recreate_grid(self.dic)
+		o_board = grid.recreate_grid(ai.dic_ai)
+		if board[row][col] == grid.b and  o_board[row][col] == grid.b:
+			self.dic[self.piece] = [row, col]
+			self.gui.human_board.board = grid.recreate_grid(self.dic)
+			#method = getattr(ApocalypseGUI, 'update_board')
+			#method(self.dic)
+			self.gui.dic_human = self.dic
+			self.gui.update_grid()
+			self.top.destroy()
+		else:
+			messagebox.showinfo('!', 'Invalid coordinates')
 				
 		
