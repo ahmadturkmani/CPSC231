@@ -5,12 +5,10 @@
 Some text in various fonts will be displayed.  Green vertical lines mark
 the left edge of the text.  Blue vertical lines mark the right edge of the
 text.
-
-Press ESC to end the test.
 '''
 
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: HORIZONTAL_METRICS.py 967 2007-06-28 03:02:44Z Alex.Holkner $'
+__version__ = '$Id$'
 
 import os
 import unittest
@@ -18,7 +16,7 @@ import unittest
 from pyglet.gl import *
 from pyglet import font
 
-import base_text
+from . import base_text
 
 base_path = os.path.dirname(__file__)
 

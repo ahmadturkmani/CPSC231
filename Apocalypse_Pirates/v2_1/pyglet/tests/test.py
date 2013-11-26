@@ -3,6 +3,39 @@
 '''Test framework for pyglet.  Reads details of components and capabilities
 from a requirements document, runs the appropriate unit tests.
 
+How to Run the Tests
+--------------------
+::
+
+    python tests/test.py top app graphics clock resource # these all run automatically
+    python tests/test.py font media text
+    python tests/test.py image
+    python tests/test.py window
+
+Because the tests are interactive, they can take quite a while to complete. The
+'window' section in particular takes a long time. It can be frustrating to get
+almost through the tests and then something gets messed up, so we suggest you
+run the tests in sections as listed above. If you are curious, the sections are
+defined in tests/plan.txt. 
+
+Here are the different sections and how long they take.
+
+    =========== ===========
+    Section     Time to Run
+    =========== ===========
+    top         automatic
+    app         automatic
+    graphics    automatic
+    clock       automatic
+    resource    automatic
+    font        1 minute
+    media       1 minute
+    text        1 minute
+    image       5 minutes
+    window      10 minutes
+    =========== ===========
+
+
 Overview
 --------
 
@@ -40,7 +73,7 @@ Some tests generate regression images if enabled, so you will only
 need to run through the interactive procedure once.  During
 subsequent runs the image shown on screen will be compared with the
 regression images and passed automatically if they match.  There are
-command line options for enabling this feature.
+command line options for enabling this feature.Literal block
 
 By default regression images are saved in tests/regression/images/
 
@@ -54,7 +87,7 @@ command-line arguments, all test cases in all sections will be run::
     python tests/test.py
 
 Before each test, a description of the test will be printed, including
-some information of what you should look for, and what interactivity
+some information of what you should look for, and what interactivityLiteral block
 is provided (including how to stop the test).  Press ENTER to begin
 the test.
 
@@ -67,39 +100,46 @@ Details of each test session are logged for future use.
 
 Command-line options:
 
---plan=
+`--plan=`
     Specify the test plan file (defaults to tests/plan.txt)
---test-root=
+`--test-root=`
     Specify the top-level directory to look for unit tests in (defaults
     to test/)
---capabilities=
+`--capabilities=`
     Specify the capabilities to select, comma separated.  By default this
     only includes your operating system capability (X11, WIN or OSX) and
     GENERIC.
---log-level=
-    Specify the minimum log level to write (defaults to 10: info)
---log-file=
+`--log-level=`
+    Specify the minimum log level to write (defaults to 20: info)
+
+`--log-file=`
     Specify log file to write to (defaults to "pyglet.%d.log")
---regression-capture
+
+`--regression-capture`
     Save regression images to disk.  Use this only if the tests have
     already been shown to pass.
---regression-check
+
+`--regression-check`
     Look for a regression image on disk instead of prompting the user for
     passage.  If a regression image is found, it is compared with the test
     case using the tolerance specified below.  Recommended only for
     developers.
---regression-tolerance=
+
+`--regression-tolerance=`
     Specify the tolerance when comparing a regression image.  A value of
     2, for example, means each sample component must be +/- 2 units
     of the regression image.  Tolerance of 0 means images must be identical,
     tolerance of 256 means images will always match (if correct dimensions).
     Defaults to 2.
---regression-path=
+
+`--regression-path=`
     Specify the directory to store and look for regression images.
     Defaults to tests/regression/images/
---developer
+
+`--developer`
     Selects the DEVELOPER capability.
---no-interactive=
+
+`--no-interactive=`
     Don't write descriptions or prompt for confirmation; just run each
     test in succcession.
 
@@ -112,9 +152,6 @@ Examples
     python tests/test.py --capabilities=GENERIC,NVIDIA,WIN window
 
 Runs all tests in the window section with the given capabilities.
-
-    python tests/test.py --no-interactive FULLSCREEN_TOGGLE
-
 Test just the FULLSCREEN_TOGGLE test case without prompting for input (useful
 for development).
 
@@ -172,6 +209,16 @@ import sys
 import time
 import unittest
 
+# --- Python 2/3 compatibility helpers ---
+PY3K = True if sys.version_info[0] == 3 else False
+
+def prompt(message):
+    if PY3K:
+        return input(message)
+    else:
+        return raw_input(message)
+
+
 # So we can find tests.regression and ensure local pyglet copy is tested.
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
@@ -202,11 +249,14 @@ class TestCase(object):
         return os.path.join(regressions_path, '%s.png' % self.name)
 
     def test(self, options):
+        options.tests_count += 1
         if not options.capabilities.intersection(self.capabilities):
+            options.tests_skipped += 1
+            options.log.debug('Capabilities mismatch. Skipping %s', self)
             return
 
-        print ("Running Test: %s" % self.name)
-        options.log.info('Testing %s.', self)
+        options.log.info('--- test (%d/%d) %s',
+                         options.tests_count, options.num_tests, self)
         if options.pretend:
             return
 
@@ -235,11 +285,14 @@ class TestCase(object):
         else:
             result = StandardTestResult(self)
 
+        print('-' * 78)
+        print("Running Test: %s (%d/%d)\n" % (self, options.tests_count, options.num_tests))
+        if module.__doc__:
+            print('    ' + module.__doc__.replace('\n','\n    '))
         if module_interactive:
-            print '-' * 78
-            if module.__doc__:
-                print module.__doc__
-            raw_input('Press return to begin test...')
+            prompt('Press return to begin test...')
+
+
         suite = unittest.TestLoader().loadTestsFromModule(module)
 
         options.log.info('Begin unit tests for %s', self)
@@ -252,14 +305,22 @@ class TestCase(object):
             options.log.error(error[1])
         options.log.info('%d tests run', result.testsRun)
 
+        num_failures = len(result.failures)
+        num_errors = len(result.errors)
+        if num_failures or num_errors:
+            print('%d Failures and %d Errors detected.' % (num_failures, num_errors))
+
         if (module_interactive and 
             len(result.failures) == 0 and 
             len(result.errors) == 0):
-            print module.__doc__
-            user_result = raw_input('[P]assed test, [F]ailed test: ')
-            if user_result and user_result[0] in ('F', 'f'):
-                print 'Enter failure description: '
-                description = raw_input('> ')
+#             print module.__doc__
+            user_result = prompt('Passed [Yn]: ')
+            while user_result and user_result not in 'YyNn':
+                print("Unrecognized response '%s'" % user_result)
+                user_result = prompt('Passed [Yn]: ')
+            if user_result and user_result in 'Nn':
+                print('Enter failure description: ')
+                description = prompt('> ')
                 options.log.error('User marked fail for %s', self)
                 options.log.error(description)
             else:
@@ -274,6 +335,9 @@ class TestCase(object):
 
     def __cmp__(self, other):
         return cmp(str(self), str(other))
+
+    def num_tests(self):
+        return 1
 
 class TestSection(object):
     def __init__(self, name):
@@ -291,7 +355,10 @@ class TestSection(object):
     def __repr__(self):
         return 'TestSection(%s)' % self.name
 
-class TestPlan(TestSection):
+    def num_tests(self):
+        return sum([c.num_tests() for c in self.children])
+
+class TestPlan(object):
     def __init__(self):
         self.root = None
         self.names = {}
@@ -319,7 +386,8 @@ class TestPlan(TestSection):
                 continue
 
             indent = len(line) - len(line.lstrip())
-            while sections and sections[-1].indent > indent:
+            while (sections and sections[-1].indent and
+                   sections[-1].indent > indent):
                 sections.pop()
 
             if sections[-1].indent is None:
@@ -343,7 +411,29 @@ class TestPlan(TestSection):
                 plan.names[section.name] = section
 
         return plan
-        
+
+    def run(self, options, names=[]):
+        if not names:
+            components = [self.root]
+        else:
+            components = []
+            for name in names:
+                if name not in self.names:
+                    options.log.error('Unknown test case or section "%s"', name)
+                    return False
+                else:
+                    components.append(self.names[name])
+                
+        options.num_tests = sum([c.num_tests() for c in components])
+        options.tests_count = 0
+        options.tests_skipped = 0
+        for component in components:
+            component.test(options)
+        print('-' * 78)
+
+        return True
+
+
 class StandardTestResult(unittest.TestResult):
     def __init__(self, component):
         super(StandardTestResult, self).__init__()
@@ -434,7 +524,9 @@ class RegressionCheckTestResult(unittest.TestResult):
 def main():
     capabilities = ['GENERIC']
     platform_capabilities = {
+        'linux': 'X11',
         'linux2': 'X11',
+        'linux3': 'X11',
         'win32': 'WIN',
         'cygwin': 'WIN',
         'darwin': 'OSX'
@@ -454,7 +546,7 @@ def main():
     op.add_option('--capabilities', help='selected test capabilities',
         default=','.join(capabilities))
     op.add_option('--log-level', help='verbosity of logging',
-        default=10, type='int')
+        default=20, type='int')
     op.add_option('--log-file', help='log to FILE', metavar='FILE', 
         default='pyglet.%d.log')
     op.add_option('--regression-path', metavar='DIR', default=regressions_path,
@@ -490,31 +582,22 @@ def main():
             i += 1
         options.log_file = options.log_file % i
 
-    logging.basicConfig(filename=options.log_file, level=options.log_level)
+    print('Test results are saved in log file:', options.log_file)
+
+    logging.basicConfig(filename=options.log_file, level=options.log_level, format='%(levelname)s %(message)s')
     options.log = logging.getLogger()
 
     options.log.info('Beginning test at %s', time.ctime())
     options.log.info('Capabilities are: %s', ', '.join(options.capabilities))
     options.log.info('sys.platform = %s', sys.platform)
+    options.log.info('pyglet.version = %s', pyglet.version)
     options.log.info('Reading test plan from %s', options.plan)
+
     plan = TestPlan.from_file(options.plan)
-
-    errors = False
-    if args:
-        components = []
-        for arg in args:
-            try:
-                component = plan.names[arg]
-                components.append(component)
-            except KeyError:
-                options.log.error('Unknown test case or section "%s"', arg)
-                errors = True
-    else:
-        components = [plan.root]
-
-    if not errors:
-        for component in components:
-            component.test(options)
+    if not plan.run(options, args):
+       options.log.error('Test run failed.')
+    
+    print('Test results are saved in log file:', options.log_file)
 
 if __name__ == '__main__':
     main()

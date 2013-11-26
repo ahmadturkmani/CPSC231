@@ -1,67 +1,76 @@
-1.1.4
-    * Bugfix release http://code.google.com/p/pyglet/issues/list
-    * Issue 368: permission issues with some doc and example files
-    * Issue 381: Missing attribute in VertexDomain when changing the group attribute of a sprite multiple times
-    * Issue 382: evdev device name unicode problem
-    * Issue 390: Various typos and keyword errors in pyglet
-    * Issue 391: code cleanups for pyglet.image
-    * Issue 392: code cleanups for text and font
-    * Issue 393: code cleanup for input and app
-    * Issue 407: random crash with pyglet.clock.tick()
-    * Issue 408: IncrementalTextLayout, when deleted, still renders into its batch on document update
-    * Issue 410: typo in pyglet/font/base.py
-    * Issue 413: TileableTexture interchanges red and blue in some JPGs
-    * Issue 414: Carbon platform missing support for multiple mouse buttons during drag
-    * Issue 416: Endless loop in pyglet.resource.reindex()
-    * Issue 422: Documentation: pyglet.resource and pats
-    * Issue 423: glMultiDrawElements called with incorrect arguments in method IndexedVertexDomain.draw
-    * Issue 424: Small documentation error in document layout model page
-    * Issue 426: Attempt to load resource from zipfile with no internal directory structure fails
-    * Issue 436: QuickTimeImageDecoder leaks memory
-    * Issue 439: EVENT_CLOSE test can't be passed
-    * Issue 440: tests/window/WINDOW_SET_MOUSE_SYSTEM_CURSOR does not exit when escape is pressed
-    * Issue 443: after the test window.EVENT_SHOW_HIDE process must be killed
-    * Issue 444: tests/resources/RES_LOAD_IMAGE opens a slew of windows and doesn't close them	
-    * Issue 447: import time missing from pyglet.app.win32 (pyglet 1.1 maintenance branch)
-    * Issue 449: astraea example missing font
-    * Backport fix for RES_LOAD test15 from trunk
-    * Add tests/clock/MULTICORE.py
-    * improve clock test with pyglet.clock.tick
+1.2beta1
+    + new API: font.have_font(name) return True if named font is installed
+    * tests: invalid answer no longer marks test as passed, some windows can
+      be closed with ENTER key, test counter fixed and added to reports
+    * tests: partial Python 3 compatibility
+    * tools/gl_info.py: add pyglet version and platform info
+    * pyglet.media: fixed management of OpenAL buffers (thanks Walter Woods)
+    * Windows: fix loading system cursors
+    * Windows: implemented Win32Font.have_font() (anatoly techtonik)
+	* OS X: fix window creation under Mountain Lion (thanks Kuba Niegowski)
+	* OS X: Added dynamic library loading support for pyinstaller's handling of
+	  dynamic libraries on OS X (thanks Nathan Stocks)
 
-1.1.3
-    * pyglet.clock: Fixed schedule_once with zero timeout
-    * pyglet.font: Fixed non-Unicode text rendering
-    * pyglet.graphics: Fixed cache invalidation in VertexList.resize
-    * pyglet.graphics: Fixed TextureGroup.__eq__
-    * pyglet.graphics: Fixed generic attributes
-    * pyglet.resource: Fixed resource indexing of deep directories
-    * pyglet.resource: Fixed path separator bug
-    * pyglet.text: Fixed IncrementalTextLayout with grapheme boundaries
-    * pyglet.text: Fixed ScrollableTextLayout
-    * Win32: Fixed glyph rendering of multi-character grapheme clusters
+1.2alpha1
+	The major 1.2 release brings pyglet to Python 3. Pyglet now also runs on
+	64-bit operating systems Linux, Windows and OS X. The OS X layer has
+	switched to Cocoa.
 
-1.1.2
-    * pyglet.clock: Fixed schedule_interval_soft after large delta
-    * pyglet.clock: Deprecated set_fps_limit
-    * pyglet.font: Fixed rendering of glyphs requiring Unicode combiners
-      and extenders
-    * pyglet.graphics: Fixed memory error in vertex list migration
-    * pyglet.graphics: Fixed early garbage collection of buffers in draw()
-    * pyglet.graphics: Fixed vertex domains mixing static and stream
-      attributes
-    * pyglet.image: Fixed bounds assertion on ImageGrid.__getitem__
-    * pyglet.media: Fixed OpenGL extension string splitting when extension
-      string is not available
-    * pyglet.media: Removed OpenGL functions alListener3i and alListeneriv,
-      not available on some OpenGL implementations
-    * pyglet.resource: Fixed path separator for indexed paths: '/' is now
-      used even on Windows.
-    * pyglet.window: Fixed mouse pointer visibility after fullscreen switching
-    * OS X: Fixed metrics of zero-width space
-    * OS X: Installer now looks for Python 2.6 installation
-    * Win32: Fixed context checking during initialisation
-    * Win32: Fixed run loop polling state
-    * Win32: Installer now looks for Python 2.6 installation
+	Backwards-incompatible API changes:
+
+	* renamed Label parameter 'halign' to 'align', fix for issue:460
+	* remove unused module 'glext_missing' - everything should already be in
+	  'glext_arb'
+
+	Other changes and fixes:
+
+	* updated OpenGL wrappers (except for agl* and wgl*)
+	* added set_mouse_position to window, fix for issue:467
+	* configurable texture filtering for issue:463
+	* correction to use textures min/mag filter for get_texture
+	* fix runaway event loops caused by least squares estimator
+	* compute correct expiration time for the event loop
+	* fix ordering of Groups and OrderedGroups
+	* fix loading of small images using GdkPixbuf2ImageDecoder for issue:493
+	* applied Andrew Straw's pyglet-xvfb.patch patch from issue:456
+	* fix for issue:517 tests/window/CONTEXT_SHARE.py glIsList exceptions
+	* numeric keypad constants in docs don't match key.py, fix for issue:523
+	* use new method for quering extensions if OpenGL version is >= 3
+	* add missing freetype ctypes declarations, patch from issue:529
+	* add flag to check if event-loop is running
+	* add variation on how to import PIL, fix issue:551
+	* handle race condition in texture cleanup, fix for issue:565
+	* fix examples/window_platform_event.py when no "names", issue:561
+	* fix for GIFs with alpha, Frankie.Robertson, issue:411
+	* added exception for ATI radeon xpress 200M not exporting glGenBuffers
+	* allow pyglet.resource.image to specify that the image be stand-alone and
+	  not loaded into an atlas
+	* make test runner output easier to read and verify for the tester
+	* make failing to load libraries that exist but have fatal problems not
+	  be _silently_ ignored on Linux and OS X, fix issue:579
+	* fix multiline/wrap_line confusing (Martin Di Paola), per issue:394
+	* apply patch fixing image.DDS_RGB_DXT1_LOAD (and similar) throwing
+	  ImageException from petete.zur88, issue:580
+	* fix experimental/animation.py frame.delay reference (anatoly techtonik)
+	* docs: added chapter to programming guide for input module
+	* docs: fix example in animation docs
+	* docs: clarify graphics.draw() from Tim McNamara in issue:478
+	* docs: mention atlas in the programming guide
+	* docs: apply Txema Vicente's patch to generate docs with Sphinx
+	* Linux: fix different platform strings, issue:571
+	* Linux: fix 100% cpu load with scheduled events when using xlib
+	* Linux: pitch change functionality with pulseaudio driver; patch from Adam
+	  Bark, issue:536
+	* Linux: fix tiling window manager resizable window initialisation,
+	  issue:563
+	* OS X: add function key
+	* OS X: replaced pyglet/image/codecs/quartz.py with ctypes-only code
+	* OS X: added complete type declarations to darwin_hid so pypy will stop
+	  complaining
+	* Windows: apply patch for x64 issues, fix issue:510
+	* Windows: (possible) fixes for context sharing problems
+	* Windows: don't create another context in Win32Context.attach() if the
+	  sub-class (Win32ARBContext) already created one
 
 1.1.1
     * examples: Fixed graphics.py triangle windings

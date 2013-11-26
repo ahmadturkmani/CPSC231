@@ -2,14 +2,14 @@
 # pyglet
 # Copyright (c) 2006-2008 Alex Holkner
 # All rights reserved.
-#
+# 
 # Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
+# modification, are permitted provided that the following conditions 
 # are met:
 #
 #  * Redistributions of source code must retain the above copyright
 #    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above copyright
+#  * Redistributions in binary form must reproduce the above copyright 
 #    notice, this list of conditions and the following disclaimer in
 #    the documentation and/or other materials provided with the
 #    distribution.
@@ -33,7 +33,7 @@
 # ----------------------------------------------------------------------------
 # png.py - PNG encoder in pure Python
 # Copyright (C) 2006 Johann C. Rocholl <johann@browsershots.org>
-# <ah> Modifications for pyglet by Alex Holkner <alex.holkner@gmail.com>
+# <ah> Modifications for pyglet by Alex Holkner <alex.holkner@gmail.com> 
 #
 # Permission is hereby granted, free of charge, to any person
 # obtaining a copy of this software and associated documentation files
@@ -94,6 +94,7 @@ import struct
 import math
 from array import array
 
+from pyglet.compat import asbytes
 
 _adam7 = ((0, 0, 8, 8),
           (4, 0, 8, 8),
@@ -237,6 +238,8 @@ class Writer:
         Write a PNG chunk to the output file, including length and checksum.
         """
         # http://www.w3.org/TR/PNG/#5Chunk-layout
+        tag = asbytes(tag)
+        data = asbytes(data)
         outfile.write(struct.pack("!I", len(data)))
         outfile.write(tag)
         outfile.write(data)
@@ -501,7 +504,13 @@ class Reader:
             raise ValueError('Chunk %s too short for checksum', tag)
         verify = zlib.crc32(tag)
         verify = zlib.crc32(data, verify)
-        verify = struct.pack('!i', verify)
+        # Whether the output from zlib.crc32 is signed or not varies
+        # according to hideous implementation details, see
+        # http://bugs.python.org/issue1202 .
+        # We coerce it to be positive here (in a way which works on
+        # Python 2.3 and older).
+        verify &= 2**32 - 1
+        verify = struct.pack('!I', verify)
         if checksum != verify:
             # print repr(checksum)
             (a,) = struct.unpack('!I', checksum)
@@ -729,11 +738,11 @@ class Reader:
                 raise Error('Chunk error: ' + e.args[0])
 
             # print >> sys.stderr, tag, len(data)
-            if tag == 'IHDR': # http://www.w3.org/TR/PNG/#11IHDR
+            if tag == asbytes('IHDR'): # http://www.w3.org/TR/PNG/#11IHDR
                 (width, height, bits_per_sample, color_type,
                  compression_method, filter_method,
                  interlaced) = struct.unpack("!2I5B", data)
-                bps = bits_per_sample / 8
+                bps = bits_per_sample // 8
                 if bps == 0:
                     raise Error("unsupported pixel depth")
                 if bps > 2 or bits_per_sample != (bps * 8):
@@ -741,18 +750,27 @@ class Reader:
                 if color_type == 0:
                     greyscale = True
                     has_alpha = False
+                    has_palette = False
                     planes = 1
                 elif color_type == 2:
                     greyscale = False
                     has_alpha = False
+                    has_palette = False
                     planes = 3
+                elif color_type == 3:
+                    greyscale = False
+                    has_alpha = False
+                    has_palette = True
+                    planes = 1
                 elif color_type == 4:
                     greyscale = True
                     has_alpha = True
+                    has_palette = False
                     planes = 2
                 elif color_type == 6:
                     greyscale = False
                     has_alpha = True
+                    has_palette = False
                     planes = 4
                 else:
                     raise Error("unknown PNG colour type %s" % color_type)
@@ -766,28 +784,66 @@ class Reader:
                 self.width = width
                 self.height = height
                 self.row_bytes = width * self.psize
-            elif tag == 'IDAT': # http://www.w3.org/TR/PNG/#11IDAT
+            elif tag == asbytes('IDAT'): # http://www.w3.org/TR/PNG/#11IDAT
                 compressed.append(data)
-            elif tag == 'bKGD':
+            elif tag == asbytes('bKGD'):
                 if greyscale:
                     image_metadata["background"] = struct.unpack("!1H", data)
+                elif has_palette:
+                    image_metadata["background"] = struct.unpack("!1B", data)
                 else:
                     image_metadata["background"] = struct.unpack("!3H", data)
-            elif tag == 'tRNS':
+            elif tag == asbytes('tRNS'):
                 if greyscale:
                     image_metadata["transparent"] = struct.unpack("!1H", data)
+                elif has_palette:
+                    # may have several transparent colors
+                    image_metadata["transparent"] = array('B', data)
                 else:
                     image_metadata["transparent"] = struct.unpack("!3H", data)
-            elif tag == 'gAMA':
+            elif tag == asbytes('gAMA'):
                 image_metadata["gamma"] = (
                     struct.unpack("!L", data)[0]) / 100000.0
-            elif tag == 'IEND': # http://www.w3.org/TR/PNG/#11IEND
+            elif tag == asbytes('PLTE'): # http://www.w3.org/TR/PNG/#11PLTE
+                if not len(data) or len(data) % 3 != 0 or len(data) > 3*(2**(self.bps*8)):
+                    raise Error("invalid palette size")
+                image_metadata["palette"] = array('B', data)
+            elif tag == asbytes('IEND'): # http://www.w3.org/TR/PNG/#11IEND
                 break
-        scanlines = array('B', zlib.decompress(''.join(compressed)))
+        scanlines = array('B', zlib.decompress(asbytes('').join(compressed)))
         if interlaced:
             pixels = self.deinterlace(scanlines)
         else:
             pixels = self.read_flat(scanlines)
+
+        if has_palette:
+            if "palette" in image_metadata:
+                # convert the indexed data to RGB, or RGBA if transparent
+                rgb_pixels = array('B')
+                for pixel in pixels:
+                    pal_index = pixel*3
+                    rgb_pixels.extend(image_metadata["palette"][pal_index:pal_index+3])
+                    # if there are transparent colors, use RGBA
+                    if "transparent" in image_metadata:
+                        if pixel in image_metadata["transparent"]:
+                            rgb_pixels.append(0)
+                        else:
+                            rgb_pixels.append(255)
+                pixels = rgb_pixels
+                self.planes = 3
+
+                if "transparent" in image_metadata:
+                    self.planes += 1
+                    has_alpha = True
+                    del image_metadata["transparent"]
+
+                if "background" in image_metadata:
+                    pal_index = image_metadata["background"][0]*3
+                    image_metadata["background"] = \
+                            image_metadata["palette"][pal_index:pal_index+3]
+            else:
+                raise Error("color_type is indexed but no palette was found")
+
         image_metadata["greyscale"] = greyscale
         image_metadata["has_alpha"] = has_alpha
         image_metadata["bytes_per_sample"] = bps

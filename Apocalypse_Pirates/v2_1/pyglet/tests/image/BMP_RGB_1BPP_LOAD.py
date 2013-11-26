@@ -5,7 +5,7 @@ image on a checkboard background.
 '''
 
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: BMP_RGB_1BPP_LOAD.py 2002 2008-04-12 10:59:20Z Alex.Holkner $'
+__version__ = '$Id$'
 
 import unittest
 import base_load

@@ -5,10 +5,10 @@ appear blue.
 '''
 
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: COLOR.py 932 2007-06-25 05:41:34Z Alex.Holkner $'
+__version__ = '$Id$'
 
 import unittest
-import base_text
+from . import base_text
 
 from pyglet import font
 

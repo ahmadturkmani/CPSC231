@@ -11,7 +11,7 @@ Press ESC to exit the test.
 '''
 
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: ELEMENT.py 1898 2008-03-08 04:44:17Z Alex.Holkner $'
+__version__ = '$Id$'
 
 import unittest
 

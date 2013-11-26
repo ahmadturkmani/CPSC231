@@ -5,7 +5,7 @@ frames, in seconds.
 '''
 
 __docformat__ = 'restructuredtext'
-__version__ = '$Id: TICK.py 748 2007-03-14 14:58:46Z Alex.Holkner $'
+__version__ = '$Id$'
 
 import time
 import unittest
