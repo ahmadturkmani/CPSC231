@@ -1,3 +1,11 @@
+#################################################################################################
+#T2G5 Final Project Submission                                                                  #
+#By: The Apocalypse Pirates; Ahmed Elbannan, Hilmi Abou-Saleh, Ahmad Turkmani, Nasir Osman      #
+#################################################################################################
+#The AI module holds the tree related to the moves it should make.                              #
+##Add more info                                                                                 #
+#################################################################################################
+
 import random
 import grid
 #import important ports
