@@ -1,3 +1,12 @@
+#################################################################################################
+#T2G5 Final Project Submission                                                                  #
+#By: The Apocalypse Pirates; Ahmed Elbannan, Hilmi Abou-Saleh, Ahmad Turkmani, Nasir Osman      #
+#################################################################################################
+#The Audio module has the ability to play files passed onto it.                                 #
+#This only works on windows machines. Mac OSX and Linux are NOT supported                       #
+#################################################################################################
+
+#Imports
 import winsound
 import os
 
